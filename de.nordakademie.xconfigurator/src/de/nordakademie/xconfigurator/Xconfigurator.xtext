@@ -1,0 +1,9 @@
+grammar de.nordakademie.xconfigurator.Xconfigurator with org.eclipse.xtext.common.Terminals
+
+generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
+
+Model:
+	greetings+=Greeting*;
+	
+Greeting:
+	'Hello' name=ID '!';
