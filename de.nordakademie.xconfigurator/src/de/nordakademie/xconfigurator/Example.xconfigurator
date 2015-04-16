@@ -1,0 +1,19 @@
+manufacturer "Mercedes" mercedes // Collection of Cars
+
+Option1:
+
+car "SLK" <mercedes> // Collection of components
+component1 "motor" 120 1376// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
+component2 "color" red //Enum !?
+component3 "doors" 3 // 2 < doors < 6
+component4 "wheels" 16 // 16 ist die größe in Zoll
+component5 "navigation" true // boolean
+
+Option2:
+
+car "SLK" <mercedes> // Collection of components
+motor 120 1376// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
+color red //Enum !?
+doors 3 // 2 < doors < 6
+wheels 16 // 16 ist die größe in Zoll
+navigation true // boolean
