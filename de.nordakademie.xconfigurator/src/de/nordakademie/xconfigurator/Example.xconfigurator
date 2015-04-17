@@ -2,18 +2,20 @@ manufacturer "Mercedes" mercedes // Collection of Cars
 
 Option1:
 
-car "SLK" <mercedes> // Collection of components
-component1 "motor" 120 1376// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
-component2 "color" red //Enum !?
-component3 "doors" 3 // 2 < doors < 6
-component4 "wheels" 16 // 16 ist die größe in Zoll
-component5 "navigation" true // boolean
+car "SLK" slk <mercedes> // Collection of components
+component1 "motor" 120 1376 <slk>// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
+component2 "color" red <slk>//Enum !?
+component3 "doors" 3 <slk>// 2 < doors < 6
+component4 "wheels" 16 <slk>// 16 ist die größe in Zoll
+component5 "navigation" true <slk>// boolean
 
 Option2:
 
-car "SLK" <mercedes> // Collection of components
-motor 120 1376// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
-color red //Enum !?
-doors 3 // 2 < doors < 6
-wheels 16 // 16 ist die größe in Zoll
-navigation true // boolean
+car "SLK" slk <mercedes> // Collection of components; nur ein Element je Komponente möglich 
+motor 120 1376 benzin <slk>// 120 sind PS, 1376 sind CCM //nur ein Motor je Auto möglich
+motor 120 1376 diesel <slk>// 120 sind PS, 1376 sind CCM //je Motorart evtl verschiedene Unterpunkte möglich
+motor 120 1376 elektro <slk>// 120 sind PS, 1376 sind CCM
+color red <slk>//Enum !?
+doors 3 <slk>// 2 < doors < 6
+wheels 16 <slk>// 16 ist die größe in Zoll //Nicht alle Größen je Modell auswählbar
+navigation true <slk>// boolean //Navigation evtl nicht für alle Modelle auswählbar
