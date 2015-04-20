@@ -18,4 +18,4 @@ motor 120 1376 elektro <slk>// 120 sind PS, 1376 sind CCM
 color red <slk>//Enum !?
 doors 3 <slk>// 2 < doors < 6
 wheels 16 <slk>// 16 ist die größe in Zoll //Nicht alle Größen je Modell auswählbar
-navigation true <slk>// boolean //Navigation evtl nicht für alle Modelle auswählbar
+navigation true <slk>// boolean //Navigation evtl nicht für alle Modelle auswählbar ... test
