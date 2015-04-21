@@ -10,22 +10,24 @@ Collection:
 	
 Motorbike:
 	'motorbike' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	('-'motor+=Motor* | '-'wheels+=Wheels)
-	//motor+=Motor*
-	//wheels+=Wheels
+	//(motor+=Motor* | wheels+=Wheels)
+	motor+=Motor*
+	wheels+=Wheels
 ;
 
 Automobile:
 	'automobile' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	('-'motor+=Motor* | '-'doors+=Doors | '-'wheels+=Wheels)
-	//motor+=Motor*
-	//doors+=Doors*
-	//wheels+=Wheels
+	//(motor+=Motor* | doors+=Doors | wheels+=Wheels)
+	motor+=Motor*
+	doors+=Doors*
+	wheels+=Wheels
 ;
 
 Truck:
 	'truck' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	('-'motor+=Motor* | '-'doors+=Doors | '-'wheels+=Wheels)
+	motor+=Motor*
+	doors+=Doors
+	wheels+=Wheels
 ;
 
 MeansOfTransportation:

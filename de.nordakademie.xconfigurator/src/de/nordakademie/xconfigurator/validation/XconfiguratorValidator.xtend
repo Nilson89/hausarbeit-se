@@ -3,6 +3,10 @@
  */
 package de.nordakademie.xconfigurator.validation
 
+import de.nordakademie.xconfigurator.xconfigurator.Wheels
+import org.eclipse.xtext.validation.Check
+import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
+
 //import org.eclipse.xtext.validation.Check
 
 /**
@@ -12,14 +16,15 @@ package de.nordakademie.xconfigurator.validation
  */
 class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
-//  public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					MyDslPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
+  public static val INVALID_AMOUNT_OF_WHEELS = 'invalidAmountOfWheels'
+
+	@Check
+	def checkAmountOfDoorsIsEven(Wheels wheels) {
+		if(wheels.amount % 2 != 0){
+			warning('Amount of wheels have to be an even number!',
+				XconfiguratorPackage.Literals.WHEELS__AMOUNT,
+				INVALID_AMOUNT_OF_WHEELS
+			)
+		}
+	}
 }
