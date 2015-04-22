@@ -1,0 +1,7 @@
+step "Vehicle Type Selection" vehicleTypeSelection
+step "Vehicle Configuration" vehicleConfiguration
+step "Service Selection" serviceSelection
+
+element "Submit" submit
+element "Cancel" cancel
+element "Vehicle Type Select" vehicleTypeSelect
