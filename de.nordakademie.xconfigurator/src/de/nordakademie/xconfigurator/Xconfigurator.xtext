@@ -7,8 +7,8 @@ Model: steps += Step*;
 Step:
 	'step' name = ID ':'
 	elements += AbstractElement* 
-	predecessor += Predecessor
-	successor += Successor
+	predecessor += Predecessor?
+	successor += Successor?
 ;
 
 //Navigation:
