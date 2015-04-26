@@ -7,6 +7,8 @@ import org.eclipse.xtext.validation.Check
 import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
 import de.nordakademie.xconfigurator.xconfigurator.Step
 
+//import de.nordakademie.xconfigurator.xconfigurator.Step
+
 //import org.eclipse.xtext.validation.Check
 
 /**
@@ -18,6 +20,10 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	@Check
 	def checkNoCycleInStepHierarchy(Step step) {
-		
+		if(step.successor == step || step.predecessor == step || step.successor == step.predecessor){
+			error('Error. No cycle allowed in Object Step!',
+				XconfiguratorPackage.Literals.STEP__SUCCESSOR
+			)
+		}
 	}
 }
