@@ -48,22 +48,33 @@ Successor:
  */
 Component:
 	'component' name = ID '{'
-	    //values += ValueList
+	    values += ValueList
 	'}'
 ;
 
-/* Liste von Werten */
-/*ValueList:
-	'['
-	(value = ValueType)*
-	']'
+/**
+ * Liste von Werten
+ * 
+ * Beispiel:
+ * 
+ * values: ["Audi", "VW", "Opel"]
+ */
+ValueList:
+	'values: [' values+=ValueType* ']'
 ;
-*/
 
-/* Wert */
-/*ValueType:
-	
-;*/
+/**
+ * Einfacher Wert
+ * 
+ * Beispiel:
+ * 
+ * "Audi"
+ * "BMW"
+ * "VW"
+ */
+ValueType:
+	value = STRING
+;
 
 
 
