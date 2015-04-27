@@ -21,4 +21,22 @@ class XconfiguratorGenerator implements IGenerator {
 //				.map[name]
 //				.join(', '))
 	}
+	
+	def toHtml(Step s) '''
+		<xhtml>
+			<head>
+				<title>Konfigurator</title>
+			</head>
+			<body>
+				<h3>Auswahl:</h3>
+				
+					<ul>
+						<li>Option 1</li>
+						<li>Option 2</li>
+					</ul>
+				<h3>weiter</h3>		
+				<h3>zurueck</h3>
+			</body>
+		</xhtml>
+	'''
 }
