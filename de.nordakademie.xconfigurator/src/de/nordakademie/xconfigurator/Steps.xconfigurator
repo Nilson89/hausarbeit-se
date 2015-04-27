@@ -1,39 +1,14 @@
-step vehicleTypeSelection {
-	elements:
-		selectElement "selectType": {
-			label: "Select a Vehicle Type"
-			values: ["Car", "Bike"]
-		}
-	successor: vehicleConfiguration
+/* Beispiel */
+step Start {
+	successor <Configure>
+	component Manufacturer {
+		values: ["BMW" "Audi" "VW"]
+	}
+	component Model {
+		values: []
+	}
 }
 
-step vehicleConfiguration {
-	parent: vehicleTypeSelection
-	elements:
-		selectElement "selectManufacturer": {
-			label: "Manufacturer"
-			values:
-				cond: (selectType == "Car") ? ["BMW", "Audi", "VW"] | ["Suzuki", "Honda", "Kawasaki"] /* Conditional Values */
-		}
-		selectElement "selectDoorCount": {
-			display:
-				cond: (selectType == "Car") ? true | false /* Conditional-Task: Das Attribut "display" ist optional und default auf true. Erst wenn es explizit gesetzt wird, wird es überschrieben */
-			label: "Count of Doors"
-			values: ["3", "5"]
-		}
-	successor: serviceConfiguration
-}
-
-step serviceConfiguration {
-	parent: vehicleConfiguration
-	elements:
-	successor: summary
-}
-
-step summary {
-	parent: serviceConfiguration
-	elements:
-		tableElement "summaryTable": {
-			/* Hier müsste man die Spalten definieren können, so dass später alle getätigten Inputs ausgegeben werden können */
-		}
+step Configure {
+	predecessor <Start>
 }
