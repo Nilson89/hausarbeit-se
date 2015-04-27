@@ -18,12 +18,12 @@ import de.nordakademie.xconfigurator.xconfigurator.Step
  */
 class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
-	@Check
+	/*@Check
 	def checkNoCycleInStepHierarchy(Step step) {
 		if(step.successor == step || step.predecessor == step || step.successor == step.predecessor){
 			error('Error. No cycle allowed in Object Step!',
 				XconfiguratorPackage.Literals.STEP__SUCCESSOR
 			)
 		}
-	}
+	}*/
 }

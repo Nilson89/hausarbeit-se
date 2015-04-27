@@ -2,19 +2,64 @@ grammar de.nordakademie.xconfigurator.Xconfigurator with org.eclipse.xtext.commo
 
 generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
-Model: steps += Step*;
-
-Step:
-	'step' name = ID ':'
-	elements += AbstractElement* 
-	predecessor += Predecessor?
-	successor += Successor?
+/* Der Xconfigurator besteht aus 0..1 Type-Elementen */
+Xconfigurator:
+	steps += Step*
 ;
 
-//Navigation:
-//	predecessor | successor
-//;
+/**
+ * Der Aufbau eines Step-Elements
+ * 
+ * Beispiel:
+ * 
+ * step <ID> {
+ *     predecessor, Vorgänger des Steps (optional)
+ *     successor, Nachfolger des Steps (optional)
+ *     elements, enthaltene Elemente (1..*)
+ * }
+ * 
+ */
+Step:
+	'step' name = ID '{'
+		//(predecessor = Step)?
+		//(successor = Step)?
+		//(elements += Component)* 
+	'}'
+;
 
+/**
+ * Komponente
+ * 
+ * Beispiel:
+ * 
+ * Hersteller {
+ *   
+ * }
+ */
+Component:
+	name = ID '{'
+	    //values += ValueList
+	'}'
+;
+
+/* Liste von Werten */
+/*ValueList:
+	'['
+	(value = ValueType)*
+	']'
+;
+*/
+
+/* Wert */
+/*ValueType:
+	
+;*/
+
+
+
+// ########## OLD FROM HERE ###############
+
+/*
 Predecessor:
 	'predecessor' '<' step=[Step|ID] '>'
 ;
@@ -22,9 +67,11 @@ Predecessor:
 Successor:
 	'successor' '<' step=[Step|ID] '>'
 ;
+*/
 
 
 
+/*
 AbstractElement:
 	TextElement | RadioElement | CheckboxElement | SelectElement
 	label = Label
@@ -56,7 +103,7 @@ Label:
 Value:
 	'value' name = ID
 ;
-
+*/
 
 //Collection:
 //	(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck | manufacturers+=Manufacturer)*;
