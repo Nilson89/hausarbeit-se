@@ -21,10 +21,20 @@ Xconfigurator:
  */
 Step:
 	'step' name = ID '{'
-		//(predecessor = Step)?
-		//(successor = Step)?
-		//(elements += Component)* 
+		(predecessor += Predecessor)?
+		(successor += Successor)?
+		(elements += Component)* 
 	'}'
+;
+
+/* Referenz Vorgänger zu einem Step */
+Predecessor:
+	'predecessor' '<' step=[Step|ID] '>'
+;
+
+/* Referenz Nachfolger zu einem Step */
+Successor:
+	'successor' '<' step=[Step|ID] '>'
 ;
 
 /**
@@ -32,12 +42,12 @@ Step:
  * 
  * Beispiel:
  * 
- * Hersteller {
- *   
+ * 'component' Manufacturer {
+ *     values: ['Audi', 'BMW', 'VW']
  * }
  */
 Component:
-	name = ID '{'
+	'component' name = ID '{'
 	    //values += ValueList
 	'}'
 ;
@@ -58,16 +68,6 @@ Component:
 
 
 // ########## OLD FROM HERE ###############
-
-/*
-Predecessor:
-	'predecessor' '<' step=[Step|ID] '>'
-;
-
-Successor:
-	'successor' '<' step=[Step|ID] '>'
-;
-*/
 
 
 
