@@ -15,10 +15,26 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 class XconfiguratorGenerator implements IGenerator {
 	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
-//		fsa.generateFile('greetings.txt', 'People to greet: ' + 
-//			resource.allContents
-//				.filter(typeof(Greeting))
-//				.map[name]
-//				.join(', '))
+		/* Generate Application-Index */
+		fsa.generateFile(
+			'index.html',
+			applicationIndex()
+		)
+	}
+	
+	/**
+	 * Create Application index.html
+	 */
+	def applicationIndex() {
+		return '''
+			<html>
+				<head>
+					<title>XConfigurator</title>
+				</head>
+				<body>
+					<h1>Moin Moin</h1>
+				</body>
+			</html>
+		'''
 	}
 }
