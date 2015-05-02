@@ -8,6 +8,7 @@ import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
 import org.eclipse.xtext.validation.Check
 import de.nordakademie.xconfigurator.xconfigurator.Predecessor
 import de.nordakademie.xconfigurator.xconfigurator.Successor
+import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 
 /**
  * This class contains custom validation rules. 
@@ -28,6 +29,21 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		if (step.predecessor.size > 1) {
 			warning('A Step contains at most one predecessor!', XconfiguratorPackage.Literals.STEP__PREDECESSOR)
 		}
+	}
+
+	@Check
+	def checkStepForPredecessorSuccessorExists(Xconfigurator xconf){
+		
+	}
+	
+	@Check
+	def checkSuccessorUniqueInCollecion(Xconfigurator xconf){
+		
+	}
+	
+	@Check
+	def checkPredecessorUniqueInCollecion(Xconfigurator xconf){
+		
 	}
 
 	@Check

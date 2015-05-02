@@ -6,6 +6,8 @@ package de.nordakademie.xconfigurator.generator
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
+import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import de.nordakademie.xconfigurator.xconfigurator.Step
 
 /**
  * Generates code from your model files on save.
@@ -14,17 +16,44 @@ import org.eclipse.xtext.generator.IFileSystemAccess
  */
 class XconfiguratorGenerator implements IGenerator {
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
+
 		/* Generate Application-Index */
-		fsa.generateFile(
-			'index.html',
-			application()
-		)
+		for (xconf : resource.contents.filter(Xconfigurator)) {
+			fsa.generateFile(
+				'index.html',
+				application(xconf)
+			)
+		}
 	}
-	
+
 	/**
 	 * Create Application
 	 */
-	def application() {
+	 
+	 def generateStepHierarchy(Xconfigurator xconfig){
+	 	var stepIndex=1
+//	 	First get element1 without predecessor
+//		Then get element2 where predecessor = element2
+//			...
+//		Last elementXY = element without successor
+		return '''
+		«FOR step: xconfig.steps»
+			<li class="«IF stepIndex == 1»
+						active
+						«ELSE»
+						disabled
+						«ENDIF»">
+				<a href="#step-«stepIndex++»">
+			    <h4 class="list-group-item-heading">«step.name»</h4>
+			    <p class="list-group-item-text">«step.name»</p>
+			   	</a>
+			</li>
+		«ENDFOR»
+			    	        	
+		'''
+	 }
+	 
+	def application(Xconfigurator xconf) {
 		return '''
 			<!DOCTYPE html>
 			<html lang="en">
@@ -48,22 +77,22 @@ class XconfiguratorGenerator implements IGenerator {
 			    <nav class="navbar navbar-default">
 			      <div class="container">
 			        <div class="navbar-header">
-				      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#xconfigurator-navbar">
-				        <span class="sr-only">Toggle navigation</span>
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-				        <span class="icon-bar"></span>
-				      </button>
-				      <a class="navbar-brand" href="#">XConfigurator</a>
-				    </div>
-				    
-				    <div class="collapse navbar-collapse" id="xconfigurator-navbar">
-      				  <ul class="nav navbar-nav">
-      				    <li>
-      				      <a href="#">Home</a>
-      				    </li>
-      				  </ul>
-      				</div>
+			       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#xconfigurator-navbar">
+			         <span class="sr-only">Toggle navigation</span>
+			         <span class="icon-bar"></span>
+			         <span class="icon-bar"></span>
+			         <span class="icon-bar"></span>
+			       </button>
+			       <a class="navbar-brand" href="#">XConfigurator</a>
+			     </div>
+			     
+			     <div class="collapse navbar-collapse" id="xconfigurator-navbar">
+			     		  <ul class="nav navbar-nav">
+			     		    <li>
+			     		      <a href="#">Home</a>
+			     		    </li>
+			     		  </ul>
+			     		</div>
 			      </div>
 			    </nav>
 			    
@@ -73,59 +102,62 @@ class XconfiguratorGenerator implements IGenerator {
 			    	    <div class="col-xs-12">
 			    			<h1>Konfiguration</h1>
 			    			<p class="text-left">
-				    			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
-				    			sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
-				    			sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. 
-				    			Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
-				    			Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt 
-				    			ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
-				    			duo dolores et ea rebum. Stet clita kasd gubergren, 
-				    			no sea takimata sanctus est Lorem ipsum dolor sit amet.
+			    				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
+			    				sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
+			    				sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. 
+			    				Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+			    				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt 
+			    				ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
+			    				duo dolores et ea rebum. Stet clita kasd gubergren, 
+			    				no sea takimata sanctus est Lorem ipsum dolor sit amet.
 			    			</p>
 			    		</div>
-		    		</div>
+			    	</div>
 			    	
 			    	<!-- Configurator -->
 			    	<div class="row form-group">
-				        <div class="col-xs-12">
-				            <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-				                <li class="active"><a href="#step-1">
-				                    <h4 class="list-group-item-heading">Step 1</h4>
-				                    <p class="list-group-item-text">First step description</p>
-				                </a></li>
-				                <li class="disabled"><a href="#step-2">
-				                    <h4 class="list-group-item-heading">Step 2</h4>
-				                    <p class="list-group-item-text">Second step description</p>
-				                </a></li>
-				                <li class="disabled"><a href="#step-3">
-				                    <h4 class="list-group-item-heading">Step 3</h4>
-				                    <p class="list-group-item-text">Third step description</p>
-				                </a></li>
-				            </ul>
-				        </div>
-					</div>
-				    <div class="row setup-content" id="step-1">
-				        <div class="col-xs-12">
-				            <div class="col-md-12 well text-center">
-				                <h1> STEP 1</h1>
-				                <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
-				            </div>
-				        </div>
-				    </div>
-				    <div class="row setup-content" id="step-2">
-				        <div class="col-xs-12">
-				            <div class="col-md-12 well">
-				                <h1 class="text-center"> STEP 2</h1>
-				            </div>
-				        </div>
-				    </div>
-				    <div class="row setup-content" id="step-3">
-				        <div class="col-xs-12">
-				            <div class="col-md-12 well">
-				                <h1 class="text-center"> STEP 3</h1>
-				            </div>
-				        </div>
-				    </div>
+			    	    <div class="col-xs-12">
+			    	        <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+«««			    	        «FOR step: xconf.steps»
+								«generateStepHierarchy(xconf)»
+«««			    	        «ENDFOR»
+«««			    	            <li class="active"><a href="#step-1">
+«««			    	                <h4 class="list-group-item-heading">Step 10</h4>
+«««			    	                <p class="list-group-item-text">First step description</p>
+«««			    	            </a></li>
+«««			    	            <li class="disabled"><a href="#step-2">
+«««			    	                <h4 class="list-group-item-heading">Step 2</h4>
+«««			    	                <p class="list-group-item-text">Second step description</p>
+«««			    	            </a></li>
+«««			    	            <li class="disabled"><a href="#step-3">
+«««			    	                <h4 class="list-group-item-heading">Step 3</h4>
+«««			    	                <p class="list-group-item-text">Third step description</p>
+«««			    	            </a></li>
+			    	        </ul>
+			    	    </div>
+			  </div>
+			     <div class="row setup-content" id="step-1">
+			         <div class="col-xs-12">
+			             <div class="col-md-12 well text-center">
+			                 <h1> STEP 1</h1>
+			                 <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
+			             </div>
+			         </div>
+			     </div>
+			     <div class="row setup-content" id="step-2">
+			         <div class="col-xs-12">
+			             <div class="col-md-12 well">
+			                 <h1 class="text-center"> STEP 2</h1>
+			             </div>
+			         </div>
+			     </div>
+			     <div class="row setup-content" id="step-3">
+			         <div class="col-xs-12">
+			             <div class="col-md-12 well">
+			                 <h1 class="text-center"> STEP 3</h1>
+			             </div>
+			         </div>
+			     </div>
 			    </div>
 			
 			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -136,8 +168,8 @@ class XconfiguratorGenerator implements IGenerator {
 			    <!-- Custom JS-Logic -->
 			    <script type="text/javascript">
 			        $(document).ready(function() {
-					    var navListItems = $('ul.setup-panel li a'),
-					        allWells = $('.setup-content');
+			      var navListItems = $('ul.setup-panel li a'),
+			          allWells = $('.setup-content');
 					
 					    allWells.hide();
 					
@@ -164,9 +196,9 @@ class XconfiguratorGenerator implements IGenerator {
 					        $(this).remove();
 					    })    
 					});
-			    </script>
-			    
-			  </body>
+					  </script>
+					  
+					</body>
 			</html>
 		'''
 	}
