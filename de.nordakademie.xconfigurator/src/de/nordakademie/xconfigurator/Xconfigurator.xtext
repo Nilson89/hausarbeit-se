@@ -2,56 +2,170 @@ grammar de.nordakademie.xconfigurator.Xconfigurator with org.eclipse.xtext.commo
 
 generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
+/* Der Xconfigurator besteht aus 0..1 Type-Elementen */
+Xconfigurator:
+	steps += Step*
+;
+
+/**
+ * Der Aufbau eines Step-Elements
+ * 
+ * Beispiel:
+ * 
+ * step <ID> {
+ *     predecessor, Vorgänger des Steps (optional)
+ *     successor, Nachfolger des Steps (optional)
+ *     elements, enthaltene Elemente (1..*)
+ * }
+ * 
+ */
+Step:
+	'step' name = ID '{'
+		(predecessor += Predecessor)?
+		(successor += Successor)?
+		(elements += Component)* 
+	'}'
+;
+
+/* Referenz Vorgänger zu einem Step */
+Predecessor:
+	'predecessor' '<' step=[Step|ID] '>'
+;
+
+/* Referenz Nachfolger zu einem Step */
+Successor:
+	'successor' '<' step=[Step|ID] '>'
+;
+
+/**
+ * Komponente
+ * 
+ * Beispiel:
+ * 
+ * 'component' Manufacturer {
+ *     values: ['Audi', 'BMW', 'VW']
+ * }
+ */
+Component:
+	'component' name = ID '{'
+	    values += ValueList
+	'}'
+;
+
+/**
+ * Liste von Werten
+ * 
+ * Beispiel:
+ * 
+ * values: ["Audi", "VW", "Opel"]
+ */
+ValueList:
+	'values: [' values+=ValueType* ']'
+;
+
+/**
+ * Einfacher Wert
+ * 
+ * Beispiel:
+ * 
+ * "Audi"
+ * "BMW"
+ * "VW"
+ */
+ValueType:
+	value = STRING
+;
+
+
+
+// ########## OLD FROM HERE ###############
+
+
+
+/*
+AbstractElement:
+	TextElement | RadioElement | CheckboxElement | SelectElement
+	label = Label
+;
+
+SelectElement:
+	'selectElement' name = ID
+	values += Value+
+;
+
+CheckboxElement:
+	'checkboxElement' name = ID
+	values += Value+
+;
+
+RadioElement:
+	'radioElement' name = ID
+	values += Value+
+;
+
+TextElement:
+	'textElement' name = ID
+;
+
+Label:
+	'label' name = ID
+;
+
+Value:
+	'value' name = ID
+;
+*/
+
 //Collection:
 //	(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck | manufacturers+=Manufacturer)*;
 	
-Collection:
-	(manufacturers+=Manufacturer | meansoftransportations+=MeansOfTransportation)*;
+//Collection:
+//	(manufacturers+=Manufacturer | meansoftransportations+=MeansOfTransportation)*;
 	
-Motorbike:
-	'motorbike' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	//(motor+=Motor* | wheels+=Wheels)
-	motor+=Motor*
-	wheels+=Wheels
-;
+//Motorbike:
+//	'motorbike' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
+//	//(motor+=Motor* | wheels+=Wheels)
+//	motor+=Motor*
+//	wheels+=Wheels
+//;
 
-Automobile:
-	'automobile' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	//(motor+=Motor* | doors+=Doors | wheels+=Wheels)
-	motor+=Motor*
-	doors+=Doors*
-	wheels+=Wheels
-;
+//Automobile:
+//	'automobile' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
+//	//(motor+=Motor* | doors+=Doors | wheels+=Wheels)
+//	motor+=Motor*
+//	doors+=Doors*
+//	wheels+=Wheels
+//;
 
-Truck:
-	'truck' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-	motor+=Motor*
-	doors+=Doors
-	wheels+=Wheels
-;
+//Truck:
+//	'truck' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
+//	motor+=Motor*
+//	doors+=Doors
+//	wheels+=Wheels
+//;
 
-MeansOfTransportation:
-	Motorbike | Automobile | Truck
-;
+//MeansOfTransportation:
+//	Motorbike | Automobile | Truck
+//;
 
-Manufacturer:
-	'manufacturer' description=STRING name=ID
+//Manufacturer:
+//	'manufacturer' description=STRING name=ID
 	//':'
 	//'-'(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck)*
-;
+//;
 
-Motor:
-	'motor' ps=INT ccm=INT type=Motortype
-	;
+//Motor:
+//	'motor' ps=INT ccm=INT type=Motortype
+//	;
 
-enum Motortype:
-	petrol | electro | diesel
-;
+//enum Motortype:
+//	petrol | electro | diesel
+//;
 
-Doors:
-	'doors' amount=INT
-;
+//Doors:
+//	'doors' amount=INT
+//;
 
-Wheels:
-	'wheels' amount=INT
-;
+//Wheels:
+//	'wheels' amount=INT
+//;

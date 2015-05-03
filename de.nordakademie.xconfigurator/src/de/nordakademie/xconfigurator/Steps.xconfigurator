@@ -1,0 +1,45 @@
+/* Beispiel */
+step Start {
+	successor <Configure>
+	component Manufacturer {
+		values: ["BMW" "Audi" "VW"]
+	}
+	component Model {
+		values: []
+	}
+}
+
+step Configure {
+	predecessor <Start>
+	successor <Service>
+	
+}
+
+
+/* So soll es sein */
+step Start {
+	successor <Configure>
+	component Type {
+		values: ["Car" "Bike"]
+	}
+	component Manufacturer {
+		values: ["BMW" "Audi" "VW"]
+	}
+	component Model {
+		values: []
+	}
+	component Doors {
+		values: ["2/3" "4/5"]
+	}
+	component Garantieverlaengerung {
+		type: boolean
+	}
+}
+
+step Configure {
+	predecessor <Start>
+}
+
+step Service {
+	
+}
