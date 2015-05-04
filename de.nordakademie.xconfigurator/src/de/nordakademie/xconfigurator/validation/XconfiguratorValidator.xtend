@@ -31,20 +31,77 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		}
 	}
 
-	@Check
-	def checkStepForPredecessorSuccessorExists(Xconfigurator xconf){
-		
-	}
-	
-	@Check
-	def checkSuccessorUniqueInCollecion(Xconfigurator xconf){
-		
-	}
-	
-	@Check
-	def checkPredecessorUniqueInCollecion(Xconfigurator xconf){
-		
-	}
+	//	@Check
+	//	def checkStepForPredecessorSuccessorExists(Xconfigurator xconf) {
+	//	}
+	//	@Check
+	//	def checkSuccessorUniqueInCollection(Xconfigurator xconf) {
+	//		var int i
+	//		var int j
+	//
+	//		for (i = 0; i < xconf.steps.length; i++) {
+	//			for (j = i + 1; j < xconf.steps.length; j++) {
+	//				if (xconf.steps.get(i).successor.get(0).identityEquals(xconf.steps.get(j).successor.get(0))) {
+	//					error(
+	//						'Successor step is used several times. Allowed at most one!',
+	//						XconfiguratorPackage.Literals.STEP__SUCCESSOR
+	//					)
+	//				}
+	//			}
+	//		}
+	//	}
+	//
+	//	@Check
+	//	def checkPredecessorUniqueInCollection(Xconfigurator xconf) {
+	//		var int i
+	//		var int j
+	//
+	//		for (i = 0; i < xconf.steps.length; i++) {
+	//			for (j = i + 1; j < xconf.steps.length; j++) {
+	//				if (xconf.steps.get(i).predecessor.get(0).identityEquals(xconf.steps.get(j).predecessor.get(0))) {
+	//					error(
+	//						'Predecessor step is used several times. Allowed at most one!',
+	//						XconfiguratorPackage.Literals.STEP__PREDECESSOR
+	//					)
+	//				}
+	//			}
+	//		}
+	//	}
+//	@Check
+//	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
+//
+//		//Startpoint
+//		var int i = 0
+//		for (Step step : xconf.steps) {
+//			if (step.predecessor.isEmpty) {
+//				i++
+//				if (i > 1) {
+//					error(
+//						'Multiple Steps without predecessor. Allowed at most one!',
+//						XconfiguratorPackage.Literals.STEP__PREDECESSOR
+//					)
+//				}
+//			}
+//		}
+//	}
+//
+//	@Check
+//	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
+//
+//		//Endpoint
+//		var int i = 0
+//		for (Step step : xconf.steps) {
+//			if (step.successor.isEmpty) {
+//				i++
+//				if (i > 1) {
+//					error(
+//						'Multiple Steps without successor. Allowed at most one!',
+//						XconfiguratorPackage.Literals.STEP__SUCCESSOR
+//					)
+//				}
+//			}
+//		}
+//	}
 
 	@Check
 	def checkNoCycleInStepSuccessor(Step step) {
@@ -91,7 +148,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	//		}
 	//	}
 	//}
-	
 	@Check
 	def checkNoCycleInSuccessorPredecessor(Step step) {
 		if (!step.successor.empty && !step.predecessor.empty) {
