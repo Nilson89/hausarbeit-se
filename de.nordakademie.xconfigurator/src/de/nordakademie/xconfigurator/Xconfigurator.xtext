@@ -46,6 +46,9 @@ Successor:
  *     values: ['Audi', 'BMW', 'VW']
  * }
  */
+ 
+ /** TEST TEST */
+ 
 Component:
 	'component' name = ID '{'
 	    values += ValueList
