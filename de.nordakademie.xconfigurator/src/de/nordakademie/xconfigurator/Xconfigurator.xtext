@@ -50,9 +50,11 @@ Successor:
  /** TEST TEST */
  
 Component:
-	'component' name = ID '{'
-	    values += ValueList
-	'}'
+	'component' name = ID
+	type += Type
+	category += Category
+	(manufacturer += Manufacturer)*
+	(description += Description)*	
 ;
 
 /**
@@ -62,9 +64,28 @@ Component:
  * 
  * values: ["Audi", "VW", "Opel"]
  */
-ValueList:
-	'values: [' values+=ValueType* ']'
-;
+ 
+ Manufacturer:
+ 	'manufacturer: ' name = ID
+ ;
+ 
+ Type:
+ 	'type: ' name = ID
+ ;
+ 
+ Category:
+ 	'category: ' name = ID
+ ;
+ 
+ Description:
+ 	'description: ' value = STRING 
+ ;
+
+/** 
+*ValueList:
+*	'values: [' values+=ValueType* ']'
+*;
+*/
 
 /**
  * Einfacher Wert
@@ -75,10 +96,11 @@ ValueList:
  * "BMW"
  * "VW"
  */
-ValueType:
-	value = STRING
-;
 
+/**ValueType:
+*	value = STRING
+*;
+*/
 
 
 // ########## OLD FROM HERE ###############

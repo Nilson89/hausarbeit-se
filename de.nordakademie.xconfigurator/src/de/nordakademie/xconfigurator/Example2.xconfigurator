@@ -1,0 +1,33 @@
+Test Test Test: 
+
+manufacturer: Audi
+manufacturer: BMW
+manufacturer: Mercedes
+
+type: Modell
+type: Motor
+type: Getriebe
+type: Reifen
+type: Farbe
+type: Türen
+
+category: PKW
+category: LKW
+category: Motorrad
+
+component "A1"
+type: Modell
+category: PKW
+manufacturer: Audi
+
+component "Motor XYZ"
+type: Motor
+category: PKW
+
+component "Coole Reifen"
+type: Reifen
+category: Motorrad
+description: "Coole Reifen"
+
+component
+
