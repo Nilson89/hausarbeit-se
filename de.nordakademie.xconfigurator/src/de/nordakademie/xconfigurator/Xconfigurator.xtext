@@ -4,7 +4,7 @@ generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
 /* Der Xconfigurator besteht aus 0..1 Type-Elementen */
 Xconfigurator:
-	steps += Step*
+	(steps += Step	| component += Component)*
 ;
 
 /**
@@ -53,8 +53,8 @@ Component:
 	'component' name = ID
 	type += Type
 	category += Category
-	(manufacturer += Manufacturer)*
-	(description += Description)*	
+	(manufacturer += Manufacturer)?
+	(description += Description)?	
 ;
 
 /**
