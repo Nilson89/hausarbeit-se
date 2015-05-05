@@ -50,7 +50,7 @@ Successor:
  /** TEST TEST */
  
 Component:
-	'component' name = ID
+	'component' label = STRING name = ID
 	type += Type
 	category += Category
 	(manufacturer += Manufacturer)?
@@ -66,15 +66,15 @@ Component:
  */
  
  Manufacturer:
- 	'manufacturer: ' name = ID
+ 	'manufacturer: ' label=STRING name = ID
  ;
  
  Type:
- 	'type: ' name = ID
+ 	'type: ' label=STRING name = ID
  ;
  
  Category:
- 	'category: ' name = ID
+ 	'category: ' label=STRING name = ID
  ;
  
  Description:
