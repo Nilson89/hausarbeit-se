@@ -4,10 +4,9 @@ generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
 /* Der Xconfigurator besteht aus 0..1 Type-Elementen */
 Xconfigurator:
-	(steps += Step	| component += Component)*
-;
+	(steps+=Step | component+=Component)*;
 
-/**
+	/**
  * Der Aufbau eines Step-Elements
  * 
  * Beispiel:
@@ -20,24 +19,21 @@ Xconfigurator:
  * 
  */
 Step:
-	'step' name = ID '{'
-		(predecessor += Predecessor)?
-		(successor += Successor)?
-		(elements += Component)* 
-	'}'
-;
+	'step' name=ID '{'
+	(predecessor+=Predecessor)?
+	(successor+=Successor)?
+	(elements+=Component)*
+	'}';
 
 /* Referenz Vorgänger zu einem Step */
 Predecessor:
-	'predecessor' '<' step=[Step|ID] '>'
-;
+	'predecessor' '<' step=[Step|ID] '>';
 
 /* Referenz Nachfolger zu einem Step */
 Successor:
-	'successor' '<' step=[Step|ID] '>'
-;
+	'successor' '<' step=[Step|ID] '>';
 
-/**
+	/**
  * Komponente
  * 
  * Beispiel:
@@ -46,80 +42,62 @@ Successor:
  *     values: ['Audi', 'BMW', 'VW']
  * }
  */
- 
- /** TEST TEST */
- 
+
+/** TEST TEST */
 Component:
-	'component' label = STRING name = ID
-	values += ValueList
-	(visibility += AbstractVisible)?
-	(description += Description)?	
-;
+	'component' label=STRING name=ID
+	values+=ValueList
+	(visibility+=AbstractVisible)?
+	(description+=Description)?;
 
 AbstractVisible:
 	'visible: [' AbstractCondition
-	']'
-;
+	']';
 
 AbstractCondition:
 	Boolean |
-	(if = If
-	(elseif += ElseIf)*
-	else = Else)
-;
+	(if=If
+	(elseif+=ElseIf)*
+	else=Else);
 
 Condition:
-	 '('component=[Component|ID] ' = ' check = STRING')'
-;
+	'(' component=[Component|ID] ' = ' check=STRING ')';
 
-// TODO: Check if type is ok
+// TODO:type ok? 
+// 		Type soll hier dafür da sein, dass man in der Verarbeitung auslesen kann, 
+// 		ob die Bedingung eine And- oder eine Or-Verknüpfung ist
 IfStatement:
 	conditions+=Condition
 	(type+=('And' | 'Or') conditions+=Condition)*
-	'{'return = AbstractCondition'}'
-;
+	'{' return=AbstractCondition '}';
 
 If:
-	'If' IfStatement
-
-;
+	'If' IfStatement;
 
 ElseIf:
-	'ElseIf' IfStatement
-;
+	'ElseIf' IfStatement;
 
 Else:
 	'Else {' (return=AbstractCondition)
-	'}'
-;
+	'}';
 
 Boolean:
-	'true' | 'false'
-;
+	'true' | 'false';
 
-
-
-
-
-/**
+	/**
  * Liste von Werten
  * 
  * Beispiel:
  * 
  * values: ["Audi", "VW", "Opel"]
  */
- 
- Description:
- 	'description: ' value = STRING 
- ;
+Description:
+	'description: ' value=STRING;
 
- 
 ValueList:
-	'values: [' values+=ValueType* ']'
-;
+	'values: [' values+=ValueType* ']';
 
-
-/**
+	/**
  * Einfacher Wert
  * 
  * Beispiel:
@@ -128,15 +106,10 @@ ValueList:
  * "BMW"
  * "VW"
  */
-
 ValueType:
-	value = STRING
-;
+	value=STRING;
 
-
-
-// ########## OLD FROM HERE ###############
-
+	// ########## OLD FROM HERE ###############
 
 
 /*
@@ -175,10 +148,10 @@ Value:
 
 //Collection:
 //	(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck | manufacturers+=Manufacturer)*;
-	
+
 //Collection:
 //	(manufacturers+=Manufacturer | meansoftransportations+=MeansOfTransportation)*;
-	
+
 //Motorbike:
 //	'motorbike' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
 //	//(motor+=Motor* | wheels+=Wheels)
@@ -207,8 +180,8 @@ Value:
 
 //Manufacturer:
 //	'manufacturer' description=STRING name=ID
-	//':'
-	//'-'(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck)*
+//':'
+//'-'(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck)*
 //;
 
 //Motor:
