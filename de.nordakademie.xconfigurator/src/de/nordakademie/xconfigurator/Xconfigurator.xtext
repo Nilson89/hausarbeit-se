@@ -4,7 +4,7 @@ generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
 /* Der Xconfigurator besteht aus 0..1 Type-Elementen */
 Xconfigurator:
-	(steps += Step	| component += Component | manufacturer += Manufacturer | type += Type | category += Category)*
+	(steps += Step	| component += Component)*
 ;
 
 /**
@@ -51,11 +51,46 @@ Successor:
  
 Component:
 	'component' label = STRING name = ID
-	type += Type
-	category += Category
-	(manufacturer += Manufacturer)?
+	values += ValueList
+	(visibility += AbstractVisible)?
 	(description += Description)?	
 ;
+
+AbstractVisible:
+	'visible: [' AbstractCondition
+	']'
+;
+
+AbstractCondition:
+	if = If
+	(elseif += ElseIf)*
+	(else = Else)?
+;
+
+If:
+	'If (' component=[Component|ID] ' = ' check = STRING
+	') {' (boolean ?= 'true' | boolean ?= 'false')
+	'}'
+; 
+
+ElseIf:
+	'ElseIf (' component=[Component|ID] ' = ' check = STRING
+	') {' (boolean ?= 'true' | boolean ?= 'false')
+	'}'
+;
+
+Else:
+	'Else {' (boolean ?= 'true' | boolean ?= 'false')
+	'}'
+;
+
+Boolean:
+	'true' | 'false'
+;
+
+
+
+
 
 /**
  * Liste von Werten
@@ -65,27 +100,15 @@ Component:
  * values: ["Audi", "VW", "Opel"]
  */
  
- Manufacturer:
- 	'manufacturer: ' label=STRING name = ID
- ;
- 
- Type:
- 	'type: ' label=STRING name = ID
- ;
- 
- Category:
- 	'category: ' label=STRING name = ID
- ;
- 
  Description:
  	'description: ' value = STRING 
  ;
 
-/** 
-*ValueList:
-*	'values: [' values+=ValueType* ']'
-*;
-*/
+ 
+ValueList:
+	'values: [' values+=ValueType* ']'
+;
+
 
 /**
  * Einfacher Wert
@@ -97,10 +120,10 @@ Component:
  * "VW"
  */
 
-/**ValueType:
-*	value = STRING
-*;
-*/
+ValueType:
+	value = STRING
+;
+
 
 
 // ########## OLD FROM HERE ###############
