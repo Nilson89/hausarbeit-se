@@ -62,22 +62,30 @@ AbstractVisible:
 ;
 
 AbstractCondition:
-	{Boolean} |
+	Boolean |
 	(if = If
 	(elseif += ElseIf)*
-	(else = Else)?)
+	else = Else)
+;
+
+Condition:
+	 '('component=[Component|ID] ' = ' check = STRING')'
+;
+
+// TODO: Check if type is ok
+IfStatement:
+	conditions+=Condition
+	(type+=('And' | 'Or') conditions+=Condition)*
+	'{'return = AbstractCondition'}'
 ;
 
 If:
-	'If (' component=[Component|ID] ' = ' check = STRING
-	') {' (return=AbstractCondition)
-	'}'
-; 
+	'If' IfStatement
+
+;
 
 ElseIf:
-	'ElseIf (' component=[Component|ID] ' = ' check = STRING
-	') {' (return=AbstractCondition)
-	'}'
+	'ElseIf' IfStatement
 ;
 
 Else:
