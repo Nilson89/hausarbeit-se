@@ -62,25 +62,26 @@ AbstractVisible:
 ;
 
 AbstractCondition:
-	if = If
+	{Boolean} |
+	(if = If
 	(elseif += ElseIf)*
-	(else = Else)?
+	(else = Else)?)
 ;
 
 If:
 	'If (' component=[Component|ID] ' = ' check = STRING
-	') {' (boolean ?= 'true' | boolean ?= 'false')
+	') {' (return=AbstractCondition)
 	'}'
 ; 
 
 ElseIf:
 	'ElseIf (' component=[Component|ID] ' = ' check = STRING
-	') {' (boolean ?= 'true' | boolean ?= 'false')
+	') {' (return=AbstractCondition)
 	'}'
 ;
 
 Else:
-	'Else {' (boolean ?= 'true' | boolean ?= 'false')
+	'Else {' (return=AbstractCondition)
 	'}'
 ;
 
