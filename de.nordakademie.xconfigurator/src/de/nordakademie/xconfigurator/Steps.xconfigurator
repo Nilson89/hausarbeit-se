@@ -24,11 +24,23 @@ step Start {
 	}
 	component Manufacturer {
 		values: ["BMW" "Audi" "VW"]
+		description: "Ein Hersteller ist ein Hersteller!"
 	}
 	component Model {
-		values: []
+		values: [
+			IF (Type = "Car" && Manufacturer = "Audi") {
+				[]
+			} ELSEIF () {
+				[]
+			} ELSE {
+				[]
+			}
+		]
 	}
 	component Doors {
+		visible: [
+			IF (Type = "Car" && Manufacturer = "Audi") {true} ELSE {false}
+		]
 		values: ["2/3" "4/5"]
 	}
 	component Garantieverlaengerung {
