@@ -9,6 +9,8 @@ import org.eclipse.xtext.validation.Check
 import de.nordakademie.xconfigurator.xconfigurator.Predecessor
 import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import org.eclipse.emf.common.util.EList
+import javax.annotation.PreDestroy
 
 /**
  * This class contains custom validation rules. 
@@ -31,78 +33,106 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		}
 	}
 
-	//	@Check
-	//	def checkStepForPredecessorSuccessorExists(Xconfigurator xconf) {
-	//	}
-	//	@Check
-	//	def checkSuccessorUniqueInCollection(Xconfigurator xconf) {
-	//		var int i
-	//		var int j
-	//
-	//		for (i = 0; i < xconf.steps.length; i++) {
-	//			for (j = i + 1; j < xconf.steps.length; j++) {
-	//				if (xconf.steps.get(i).successor.get(0).identityEquals(xconf.steps.get(j).successor.get(0))) {
-	//					error(
-	//						'Successor step is used several times. Allowed at most one!',
-	//						XconfiguratorPackage.Literals.STEP__SUCCESSOR
-	//					)
-	//				}
-	//			}
-	//		}
-	//	}
-	//
-	//	@Check
-	//	def checkPredecessorUniqueInCollection(Xconfigurator xconf) {
-	//		var int i
-	//		var int j
-	//
-	//		for (i = 0; i < xconf.steps.length; i++) {
-	//			for (j = i + 1; j < xconf.steps.length; j++) {
-	//				if (xconf.steps.get(i).predecessor.get(0).identityEquals(xconf.steps.get(j).predecessor.get(0))) {
-	//					error(
-	//						'Predecessor step is used several times. Allowed at most one!',
-	//						XconfiguratorPackage.Literals.STEP__PREDECESSOR
-	//					)
-	//				}
-	//			}
-	//		}
-	//	}
-//	@Check
-//	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
-//
-//		//Startpoint
-//		var int i = 0
-//		for (Step step : xconf.steps) {
-//			if (step.predecessor.isEmpty) {
-//				i++
-//				if (i > 1) {
-//					error(
-//						'Multiple Steps without predecessor. Allowed at most one!',
-//						XconfiguratorPackage.Literals.STEP__PREDECESSOR
-//					)
-//				}
-//			}
-//		}
-//	}
-//
-//	@Check
-//	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
-//
-//		//Endpoint
-//		var int i = 0
-//		for (Step step : xconf.steps) {
-//			if (step.successor.isEmpty) {
-//				i++
-//				if (i > 1) {
-//					error(
-//						'Multiple Steps without successor. Allowed at most one!',
-//						XconfiguratorPackage.Literals.STEP__SUCCESSOR
-//					)
-//				}
-//			}
-//		}
-//	}
+	@Check
+	def checkSuccessorUniqueInCollection(Xconfigurator xconf) {
+		var int i
+		var int j
 
+		for (i = 0; i < xconf.steps.length; i++) {
+			for (j = i + 1; j < xconf.steps.length; j++) {
+				var EList<Successor> succList1 = xconf.steps.get(i).successor
+				var EList<Successor> succList2 = xconf.steps.get(j).successor
+
+				if (!succList1.isEmpty && !succList2.isEmpty) {
+					if (succList1.get(0).step.identityEquals(succList2.get(0).step)) {
+						error(
+							'Successor ' + succList1.get(0).step.name + ' is used several times. Allowed at most one!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	def checkPredecessorUniqueInCollection(Xconfigurator xconf) {
+		var int i
+		var int j
+
+		for (i = 0; i < xconf.steps.length; i++) {
+			for (j = i + 1; j < xconf.steps.length; j++) {
+				var EList<Predecessor> predList1 = xconf.steps.get(i).predecessor
+				var EList<Predecessor> predList2 = xconf.steps.get(j).predecessor
+
+				if (!predList1.isEmpty && !predList2.isEmpty) {
+					if (predList1.get(0).step.identityEquals(predList2.get(0).step)) {
+						error(
+							'Predecessor ' + predList1.get(0).step.name + ' is used several times. Allowed at most one!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	def checkStepUniqueIdentifier(Xconfigurator xconfigurator) {
+		var int i
+		var int j
+
+		if (!xconfigurator.steps.empty) {
+			for (i = 0; i < xconfigurator.steps.length; i++) {
+				for (j = i + 1; j < xconfigurator.steps.length; j++) {
+					if (xconfigurator.steps.get(i).identityEquals(xconfigurator.steps.get(j))) {
+						error(
+							'Name of Step ' + xconfigurator.steps.get(i).name +
+								' is used several times. Allowed at most one!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+			}
+		}
+	}
+
+		@Check
+	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
+
+		//Startpoint
+		var int i = 0
+		for (Step step : xconf.steps) {
+			if (step.predecessor.isEmpty) {
+				i++
+				if (i > 1) {
+					error(
+						'Multiple Steps without predecessor. Allowed at most one!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
+				}
+			}
+		}
+	}
+	
+		@Check
+	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
+
+		//Endpoint
+		var int i = 0
+		for (Step step : xconf.steps) {
+			if (step.successor.isEmpty) {
+				i++
+				if (i > 1) {
+					error(
+						'Multiple Steps without successor. Allowed at most one!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
+				}
+			}
+		}
+	}
+		
 	@Check
 	def checkNoCycleInStepSuccessor(Step step) {
 		if (!step.successor.empty) {
@@ -137,17 +167,24 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	def checkComponentUniqueIdentifierInStep(Step step) {
 		if (!step.elements.empty) {
 			//iterate through elements container and check names
+			var int i
+			var int j
+
+			for (i = 0; i < step.elements.length; i++) {
+				for (j = i + 1; j < step.elements.length; j++) {
+					if (step.elements.get(i).identityEquals(step.elements.get(j))) {
+						error(
+							'Name of Component ' + step.elements.get(i).name +
+								' in ' + step.name + ' is used several times. Allowed at most one!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+		}
+			
 		}
 	}
 
-	//	@Check
-	//def checkStepUniqueIdentifier(Xconfigurator xconfigurator){
-	//	if (!xconfigurator.steps.empty){
-	//		for(Step step: xconfigurator.steps){
-	//			var a = xconfigurator.steps.toMap[step]
-	//		}
-	//	}
-	//}
 	@Check
 	def checkNoCycleInSuccessorPredecessor(Step step) {
 		if (!step.successor.empty && !step.predecessor.empty) {
