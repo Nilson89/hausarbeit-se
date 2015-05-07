@@ -45,10 +45,12 @@ Successor:
 
 /** TEST TEST */
 Component:
-	'component' label=STRING name=ID
-	values+=ValueList
-	(visibility+=AbstractVisible)?
-	(description+=Description)?;
+	'component' label=STRING name=ID '{'
+		values+=ValueList
+		(visibility+=AbstractVisible)?
+		(description+=Description)?
+	'}'
+;
 
 AbstractVisible:
 	'visible: [' AbstractCondition

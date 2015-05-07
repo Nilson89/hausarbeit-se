@@ -1,57 +1,21 @@
-/* Beispiel */
 step Start {
 	successor <Configure>
-	component Manufacturer {
-		values: ["BMW" "Audi" "VW"]
+	component "Type" Type {
+		values: ["Car" "Bike"]
+		visible: [true]
 	}
-	component Model {
+	component "Manufacturer" Manufacturer {
+		values: ["BMW" "Audi" "VW"]
+		visible: [If(Type = "Car"){true}Else {false}]
+	}
+	component "Model" Model {
 		values: []
 	}
-}
-
-step Configure {
-	predecessor <Start>
-	successor <Service>
-	
-}
-
-
-/* So soll es sein */
-step Start {
-	successor <Configure>
-	component Type {
-		values: ["Car" "Bike"]
-	}
-	component Manufacturer {
-		values: ["BMW" "Audi" "VW"]
-		description: "Ein Hersteller ist ein Hersteller!"
-	}
-	component Model {
-		values: [
-			IF (Type = "Car" && Manufacturer = "Audi") {
-				[]
-			} ELSEIF () {
-				[]
-			} ELSE {
-				[]
-			}
-		]
-	}
-	component Doors {
-		visible: [
-			IF (Type = "Car" && Manufacturer = "Audi") {true} ELSE {false}
-		]
+	component "Doors" Doors {
 		values: ["2/3" "4/5"]
 	}
-	component Garantieverlaengerung {
-		type: boolean
-	}
 }
 
 step Configure {
 	predecessor <Start>
-}
-
-step Service {
-	
 }
