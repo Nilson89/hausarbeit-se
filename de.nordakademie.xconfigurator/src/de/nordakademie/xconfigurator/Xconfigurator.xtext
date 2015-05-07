@@ -84,7 +84,7 @@ Else:
 	'}';
 
 Boolean:
-	'true' | 'false';
+	{Boolean} (boolean ?= 'true' | 'false');
 
 	/**
  * Liste von Werten
