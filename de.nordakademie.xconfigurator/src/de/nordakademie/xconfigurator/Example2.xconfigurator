@@ -1,58 +1,184 @@
-step Configure {
-	predecessor <Start>
-}
+/* 
+ * Steps
+ */
 
 step Start {
-	successor <Configure>
-	component "Type" Type {
-		values: ["Car" "Bike"]
-		visible: [true]
-	}
-	component "Manufacturer" Manufacturer {
-		values: ["BMW" "Audi" "VW"]
-		visible: [If(Type = "Car"){true}Else {false}]
-	}
-	component "Model" Model {
-		values: []
-	}
-	component "Doors" Doors {
-		values: ["2/3" "4/5"]
-	}
+	successor <Configure_types>
 }
+
+step Configure_types {
+	predecessor <Start>
+	successor<Configure_manufacturers>
+	component <types>
+}
+
+step Configure_manufacturers {
+	predecessor <Configure_types>
+	successor <Configure_model>
+	component <manufacturer_kfz>
+}
+
+step Configure_model {
+	predecessor <Configure_manufacturers>
+	successor <Configure_motor>
+	component <manufacturer_kfz>
+}
+
+step Configure_motor {
+	predecessor <Configure_model>
+	successor <Configure_wheels>
+	component <motors_pkw>
+	component <motors_bike>
+	component <motors_lkw>
+}
+
+step Configure_wheels {
+	predecessor <Configure_motor>
+	successor <Configure_doors>
+	component <wheels_pkw>
+	component <wheels_lkw>
+	component <wheels_bikes>
+}
+
+step Configure_doors {
+	predecessor <Configure_wheels>
+	component <doors_kfz>
+}
+
+/*
+ * Types
+ */
 
 component "Fahrzeugtypen" types {
 values: ["PKW" "LKW" "Bike"]
 visible: [true]
-description: "KFZ-Hersteller"
+description: "Verschiedene Fahrzeugtypen"
 }
+
+/*
+ * Manufacturers
+ */
+
 component "Hersteller" manufacturer_kfz{
-values: ["BMW" "Mercedes" "Audi"]
-visible: [true]
-description: "KFZ-Hersteller"
+values: ["Mercedes" "Citroen"]
+visible: [If (types = "PKW") Or (types = "LKW") {true} Else {false}]
+description: "Hersteller, die LKWs und PKWs produzieren"
 }
-component "Modelle" models_audi_kfz{
+
+component "Hersteller" manufacturer_PKW_only{
+values: ["BMW" "Audi"]
+visible: [If (types = "PKW") {true} Else {false}]
+description: "PKW-Hersteller"
+}
+
+component "Hersteller" manufacturer_LKW_only{
+values: ["MAN" "Keine Ahnung"]
+visible: [If (types = "LKW") {true} Else {false}]
+description: "LKW-Hersteller"
+}
+
+component "Hersteller" manufacturer_Bike{
+values: ["Ducati" "Kawasaki" "Yamaha"]
+visible: [If (types = "Bike") {true} Else {false}]
+description: "Motorrad-Hersteller"
+}
+
+/*
+ * Models
+ */
+
+component "Modelle" models_audi_pkw{
 values: ["A1" "A5"]
-visible: [If (manufacturer_kfz = "Audi") And (types = "KFZ") {true} Else {false}]
+visible: [If (manufacturer_PKW_only = "Audi") And (types = "PKW") {true} Else {false}]
 description: "Audi-Fahrzeug-Modelle"
-
 }
 
-component "Motoren für KFZ" motors_kfz {
+component "Modelle" models_bmw_pkw{
+values: ["M1" "M3" "X1" "Z4"]
+visible: [If (manufacturer_PKW_only = "BMW") And (types = "PKW") {true} Else {false}]
+description: "BMW-Fahrzeug-Modelle"
+}
+
+component "Modelle" models_mercedes_pkw{
+values: ["A-Klasse" "C-Klasse" "E-Klasse"]
+visible: [If (manufacturer_kfz = "Mercedes") And (types = "PKW") {true} Else {false}]
+description: "Mercedes-PKW-Modelle"
+}
+
+component "Modelle" models_mercedes_lkw{
+values: ["Keine Ahnung" "wie" "die" "heissen"]
+visible: [If (manufacturer_kfz = "Mercedes") And (types = "LKW") {true} Else {false}]
+description: "Mercedes-LKW-Modelle"
+}
+
+component "Modelle" models_man_lkw{
+values: ["Modell 1" "Modell 2" "Modell 3" "Modell 4"]
+visible: [If (manufacturer_LKW_only = "MAN") And (types = "LKW") {true} Else {false}]
+description: "Mercedes-LKW-Modelle"
+}
+
+component "Modelle" models_ducati_bike{
+values: ["Monster" "Multistrada" "Streetfighter" "Superbike"]
+visible: [If (manufacturer_Bike = "Ducati") And (types = "Bike") {true} Else {false}]
+description: "Ducati-Motorrad-Modelle"
+}
+
+component "Modelle" models_kawasaki_bikes{
+values: ["Z1000" "Ninja ZX-10R" "Ninja ZX-6R" "Vulcan S"]
+visible: [If (manufacturer_Bike = "Kawasaki") And (types = "Bike") {true} Else {false}]
+description: "Kawasaki-Motorrad-Modelle"
+}
+
+component "Modelle" models_yamaha_bikes{
+values: ["YZF-R1" "FZ1 Fazer" "XVS 1300 Custom" "MT-09"]
+visible: [If (manufacturer_kfz = "Mercedes") And (types = "LKW") {true} Else {false}]
+description: "Mercedes-LKW-Modelle"
+}
+
+/*
+ * Motors
+ */
+
+component "Motoren für KFZ" motors_pkw {
 values: ["40kw" "70kw" "100kw" ]
 visible: [If(types = "KFZ") {true} Else {false}]
-
 }
 
 component "Motoren für LKW" motors_lkw {
 values: ["150kw" "190kw" "230kw" ]
 visible: [If(types = "LKW") {true} Else {false}]
-
 }
 
 component "Motoren für Krafträder" motors_bike {
 values: ["12kw" "20kw" "40kw" ]
 visible: [If(types = "Bike") {true} Else {false}]
-
 }
 
+/*
+ * Wheels
+ */
+ 
+component "Räder für PKW" wheels_pkw {
+values: ["10 Zoll" "15 Zoll" "20 Zoll" ]
+visible: [If(types = "PKW") {true} Else {false}]
+}
+
+component "Räder für LKW" wheels_lkw {
+values: ["12 Zoll" "17 Zoll" "22 Zoll" ]
+visible: [If(types = "LKW") {true} Else {false}]
+}
+
+component "Räder für Motorräder" wheels_bikes {
+values: ["8 Zoll" "13 Zoll" "18 Zoll" ]
+visible: [If(types = "Bike") {true} Else {false}]
+}
+ 
+ /*
+  * Doors
+  */
+
+component "Türen für KFZ" doors_kfz {
+values: ["3 Türen" "5 Türen"]
+visible: [If(types = "PKW") Or (types = "LKW") {true} Else {false}]
+}
 
