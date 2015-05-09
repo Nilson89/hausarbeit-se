@@ -1,26 +1,58 @@
-component "Fahrzeugtypen" types
+step Configure {
+	predecessor <Start>
+}
+
+step Start {
+	successor <Configure>
+	component "Type" Type {
+		values: ["Car" "Bike"]
+		visible: [true]
+	}
+	component "Manufacturer" Manufacturer {
+		values: ["BMW" "Audi" "VW"]
+		visible: [If(Type = "Car"){true}Else {false}]
+	}
+	component "Model" Model {
+		values: []
+	}
+	component "Doors" Doors {
+		values: ["2/3" "4/5"]
+	}
+}
+
+component "Fahrzeugtypen" types {
 values: ["PKW" "LKW" "Bike"]
 visible: [true]
 description: "KFZ-Hersteller"
-
-component "Hersteller" manufacturer_kfz
+}
+component "Hersteller" manufacturer_kfz{
 values: ["BMW" "Mercedes" "Audi"]
 visible: [true]
 description: "KFZ-Hersteller"
-
-component "Modelle" models_audi_kfz
+}
+component "Modelle" models_audi_kfz{
 values: ["A1" "A5"]
 visible: [If (manufacturer_kfz = "Audi") And (types = "KFZ") {true} Else {false}]
 description: "Audi-Fahrzeug-Modelle"
 
-component "Motoren für KFZ" motors_kfz
+}
+
+component "Motoren für KFZ" motors_kfz {
 values: ["40kw" "70kw" "100kw" ]
 visible: [If(types = "KFZ") {true} Else {false}]
 
-component "Motoren für LKW" motors_lkw
+}
+
+component "Motoren für LKW" motors_lkw {
 values: ["150kw" "190kw" "230kw" ]
 visible: [If(types = "LKW") {true} Else {false}]
 
-component "Motoren für Krafträder" motors_bike
+}
+
+component "Motoren für Krafträder" motors_bike {
 values: ["12kw" "20kw" "40kw" ]
 visible: [If(types = "Bike") {true} Else {false}]
+
+}
+
+
