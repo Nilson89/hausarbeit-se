@@ -10,6 +10,8 @@ import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import org.eclipse.emf.common.util.EList
 import java.util.ArrayList
+import de.nordakademie.xconfigurator.xconfigurator.Component
+import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
 
 /**
  * Generates code from your model files on save.
@@ -50,7 +52,7 @@ class XconfiguratorGenerator implements IGenerator {
 	}	
 				 
 	 // TODO: Wenn kein erster Step gefunden wurde -> throw exception	 
-	 def public Step getFirstStep(EList<Step> steps){
+	 def Step getFirstStep(EList<Step> steps){
 	 	if (steps.length > 0){
 	 		for(Step step: steps){
 	 			if (step.predecessor.isEmpty){
@@ -61,7 +63,7 @@ class XconfiguratorGenerator implements IGenerator {
 	 	}
 	 }
 	 
-	 def public Step getSuccessor(EList<Step> steps,Step predecessor){
+	 def Step getSuccessor(EList<Step> steps,Step predecessor){
 	 	for (Step step: steps){
 	 		if (step.predecessor.size > 0){
 	 			if (step.predecessor.get(0).step.identityEquals(predecessor)){
@@ -71,8 +73,21 @@ class XconfiguratorGenerator implements IGenerator {
 	 	}
 	 	return null
  	}
+ 	
+// 	def boolean isVisible(Component component) {
+	def String isVisible(Component component) {
+		var StringBuffer buffer = new StringBuffer
+ 		var EList<AbstractVisible> visibility = component.visibility
+ 		for(AbstractVisible condition : visibility) {
+ 			
+ 			var String cond = condition.toString
+ 			buffer.append(cond)
+ 			buffer.append(" | ")
+ 		}
+ 		return buffer.toString
+ 	}
 	 
-	 def displaySteps(ArrayList<Step> orderedStepList){
+	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
 	 	return '''
 		«FOR step: orderedStepList»
@@ -84,6 +99,7 @@ class XconfiguratorGenerator implements IGenerator {
 				<a href="#step-«stepIndex++»">
 			    <h4 class="list-group-item-heading">«step.name»</h4>
 			    <p class="list-group-item-text">«step.name»</p>
+			    <p class="list-group-item-text">«isVisible(step.elements.get(0).component)»</p>
 			   	</a>
 			</li>
 		«ENDFOR»

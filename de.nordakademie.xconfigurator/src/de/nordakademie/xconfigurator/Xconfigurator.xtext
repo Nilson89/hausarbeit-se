@@ -61,9 +61,7 @@ AbstractVisible:
 
 AbstractCondition:
 	Boolean |
-	(if=If
-	(elseif+=ElseIf)*
-	else=Else);
+	(if=If(elseif+=ElseIf)*else=Else);
 
 Condition:
 	'(' component=[Component|ID] ' = ' check=STRING ')';
