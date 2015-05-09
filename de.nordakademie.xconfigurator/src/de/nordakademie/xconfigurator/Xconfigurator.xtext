@@ -22,10 +22,10 @@ Step:
 	'step' name=ID '{'
 	(predecessor+=Predecessor)?
 	(successor+=Successor)?
-	(elements+=RefComponent)*
+	(elements+=ComponentReference)*
 	'}';
 
-RefComponent:
+ComponentReference:
 	'component' '<' component=[Component|ID] '>';
 
 /* Referenz Vorgänger zu einem Step */
