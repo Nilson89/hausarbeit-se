@@ -8,6 +8,10 @@ import org.eclipse.xtext.generator.IGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.Step
+import org.eclipse.emf.common.util.EList
+import javax.inject.Inject
+import java.util.List
+import java.util.ArrayList
 
 /**
  * Generates code from your model files on save.
@@ -31,13 +35,49 @@ class XconfiguratorGenerator implements IGenerator {
 	 */
 	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
+	 	//generates the step hierarchy
+	 	//commits ordered ArrayList to displayHTML method
+	 	
+	 	var ArrayList<Step> arrList
+	 	var eListSize = xconfig.steps.size
+	 	var int i
+	 	
+	 	arrList = new ArrayList<Step>
+	 	arrList.add(getFirstStep(xconfig.steps))
+
+		for (i = 0;i < eListSize - 1;i++){
+			var Step predec = arrList.get(i)
+			arrList.add(getSuccessor(xconfig.steps,predec))
+		}
+		
+		displaySteps(arrList)	
+	 }
+	 
+	 	 
+	 def public Step getFirstStep(EList<Step> steps){
+	 	if (steps.length > 0){
+	 		for(Step step: steps){
+	 			if (step.predecessor.isEmpty){
+	 				return step
+	 			}
+	 		}
+	 	}
+	 }
+	 
+	 def public Step getSuccessor(EList<Step> steps,Step predecessor){
+	 	for (Step step: steps){
+	 		if (step.predecessor.size > 0){
+	 			if (step.predecessor.get(0).step.identityEquals(predecessor)){
+	 				return step
+	 			}
+	 		}
+	 	}
+ 	}
+	 
+	 def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
-//	 	First get element1 without predecessor
-//		Then get element2 where predecessor = element2
-//			...
-//		Last elementXY = element without successor
-		return '''
-		«FOR step: xconfig.steps»
+	 	return '''
+		«FOR step: orderedStepList»
 			<li class="«IF stepIndex == 1»
 						active
 						«ELSE»
@@ -51,8 +91,9 @@ class XconfiguratorGenerator implements IGenerator {
 		«ENDFOR»
 			    	        	
 		'''
+	 	
 	 }
-	 
+		 
 	def application(Xconfigurator xconf) {
 		return '''
 			<!DOCTYPE html>
