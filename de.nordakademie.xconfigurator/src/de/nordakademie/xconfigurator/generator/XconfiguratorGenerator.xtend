@@ -3,20 +3,20 @@
  */
 package de.nordakademie.xconfigurator.generator
 
-import org.eclipse.emf.ecore.resource.Resource
-import org.eclipse.xtext.generator.IGenerator
-import org.eclipse.xtext.generator.IFileSystemAccess
-import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
-import de.nordakademie.xconfigurator.xconfigurator.Step
-import org.eclipse.emf.common.util.EList
-import java.util.ArrayList
-import de.nordakademie.xconfigurator.xconfigurator.Component
-import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
-import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
 import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
-import de.nordakademie.xconfigurator.xconfigurator.If
+import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
+import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
+import de.nordakademie.xconfigurator.xconfigurator.Boolean
+import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.ElseIf
 import de.nordakademie.xconfigurator.xconfigurator.IfStatement
+import de.nordakademie.xconfigurator.xconfigurator.Step
+import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import java.util.ArrayList
+import org.eclipse.emf.common.util.EList
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.xtext.generator.IFileSystemAccess
+import org.eclipse.xtext.generator.IGenerator
 
 /**
  * Generates code from your model files on save.
@@ -94,8 +94,8 @@ class XconfiguratorGenerator implements IGenerator {
 	}
  	
  	def boolean parse(AbstractCondition visible) {
-		if (visible instanceof de.nordakademie.xconfigurator.xconfigurator.Boolean) {
-			return parse(visible as de.nordakademie.xconfigurator.xconfigurator.Boolean)
+		if (visible instanceof Boolean) {
+			return parse(visible as Boolean)
 		} else if (visible instanceof AbstractIfCondition) {
 			return parse(visible as AbstractIfCondition)
 		} else {
@@ -124,7 +124,7 @@ class XconfiguratorGenerator implements IGenerator {
 		return null
 	}
 	
-	def boolean parse(de.nordakademie.xconfigurator.xconfigurator.Boolean visible) {
+	def boolean parse(Boolean visible) {
 		return visible.boolean
 	}
 	 
@@ -140,7 +140,7 @@ class XconfiguratorGenerator implements IGenerator {
 				<a href="#step-«stepIndex++»">
 			    <h4 class="list-group-item-heading">«step.name»</h4>
 			    <p class="list-group-item-text">«step.name»</p>
-			    <p class="list-group-item-text">«isVisible(step.elements.get(0).component)»</p>
+«««			    <p class="list-group-item-text">«isVisible(step.elements.get(0).component)»</p>
 			   	</a>
 			</li>
 		«ENDFOR»
