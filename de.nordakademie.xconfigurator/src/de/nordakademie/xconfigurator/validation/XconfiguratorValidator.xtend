@@ -174,7 +174,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 				for (j = i + 1; j < step.elements.length; j++) {
 					if (step.elements.get(i).identityEquals(step.elements.get(j))) {
 						error(
-							'Name of Component ' + step.elements.get(i).name +
+							'Name of Component ' + step.elements.get(i).component.name +
 								' in ' + step.name + ' is used several times. Allowed at most one!',
 							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 						)
