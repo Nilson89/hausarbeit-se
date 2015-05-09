@@ -9,8 +9,6 @@ import org.eclipse.xtext.generator.IFileSystemAccess
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import org.eclipse.emf.common.util.EList
-import javax.inject.Inject
-import java.util.List
 import java.util.ArrayList
 
 /**
@@ -38,22 +36,20 @@ class XconfiguratorGenerator implements IGenerator {
 	 	//generates the step hierarchy
 	 	//commits ordered ArrayList to displayHTML method
 	 	
-	 	var ArrayList<Step> arrList
-	 	var eListSize = xconfig.steps.size
-	 	var int i
+	 	var ArrayList<Step> steps
 	 	
-	 	arrList = new ArrayList<Step>
-	 	arrList.add(getFirstStep(xconfig.steps))
-
-		for (i = 0;i < eListSize - 1;i++){
-			var Step predec = arrList.get(i)
-			arrList.add(getSuccessor(xconfig.steps,predec))
+	 	var Step step = getFirstStep(xconfig.steps)
+	 	steps = new ArrayList<Step>
+	
+		while (step != null) {
+			steps.add(step)
+			step = getSuccessor(xconfig.steps, step)
 		}
-		
-		displaySteps(arrList)	
-	 }
-	 
-	 	 
+		displaySteps(steps)
+	
+	}	
+				 
+	 // TODO: Wenn kein erster Step gefunden wurde -> throw exception	 
 	 def public Step getFirstStep(EList<Step> steps){
 	 	if (steps.length > 0){
 	 		for(Step step: steps){
@@ -61,6 +57,7 @@ class XconfiguratorGenerator implements IGenerator {
 	 				return step
 	 			}
 	 		}
+	 		return null
 	 	}
 	 }
 	 
@@ -72,6 +69,7 @@ class XconfiguratorGenerator implements IGenerator {
 	 			}
 	 		}
 	 	}
+	 	return null
  	}
 	 
 	 def displaySteps(ArrayList<Step> orderedStepList){
