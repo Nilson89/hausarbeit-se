@@ -12,6 +12,11 @@ import org.eclipse.emf.common.util.EList
 import java.util.ArrayList
 import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
+import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
+import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
+import de.nordakademie.xconfigurator.xconfigurator.If
+import de.nordakademie.xconfigurator.xconfigurator.ElseIf
+import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 
 /**
  * Generates code from your model files on save.
@@ -74,18 +79,54 @@ class XconfiguratorGenerator implements IGenerator {
 	 	return null
  	}
  	
-// 	def boolean isVisible(Component component) {
-	def String isVisible(Component component) {
-		var StringBuffer buffer = new StringBuffer
+ 	//TODO
+ 	def boolean isVisible(Component component) {
  		var EList<AbstractVisible> visibility = component.visibility
- 		for(AbstractVisible condition : visibility) {
- 			
- 			var String cond = condition.toString
- 			buffer.append(cond)
- 			buffer.append(" | ")
+ 		for(AbstractVisible visible : visibility) {
+		var result = parse(visible.condition)
  		}
- 		return buffer.toString
+ 		return false
  	}
+		
+	def boolean parse(IfStatement visible) {
+		//TODO
+		return false
+	}
+ 	
+ 	def boolean parse(AbstractCondition visible) {
+		if (visible instanceof de.nordakademie.xconfigurator.xconfigurator.Boolean) {
+			return parse(visible as de.nordakademie.xconfigurator.xconfigurator.Boolean)
+		} else if (visible instanceof AbstractIfCondition) {
+			return parse(visible as AbstractIfCondition)
+		} else {
+			return false
+		}
+	}
+	
+	def boolean parse(AbstractIfCondition visible) {		
+		if(parse(visible.^if.stmt)) {
+			return parse(visible.^if.stmt.^return)
+		} else if (visible.getElseif.size > 0) {
+			var ElseIf clause = parse(visible.elseif)
+			if (clause != null) {
+				return parse(clause.stmt.^return)
+			}
+		} else {
+			return parse(visible.^else.^return)
+		}
+	}	
+		
+	def ElseIf parse(EList<ElseIf> visible) {
+		if (visible.size > 0) return null;
+		for (ElseIf clause : visible) {
+			if (parse(clause.stmt)) return clause
+		}
+		return null
+	}
+	
+	def boolean parse(de.nordakademie.xconfigurator.xconfigurator.Boolean visible) {
+		return visible.boolean
+	}
 	 
 	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1

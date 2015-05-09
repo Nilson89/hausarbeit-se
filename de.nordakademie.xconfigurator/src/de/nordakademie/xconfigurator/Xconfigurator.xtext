@@ -56,12 +56,17 @@ Component:
 ;
 
 AbstractVisible:
-	'visible: [' AbstractCondition
+	'visible: [' condition=AbstractCondition
 	']';
 
 AbstractCondition:
 	Boolean |
-	(if=If(elseif+=ElseIf)*else=Else);
+	AbstractIfCondition;
+	
+AbstractIfCondition:
+	if=If
+	(elseif+=ElseIf)*
+	else=Else;
 
 Condition:
 	'(' component=[Component|ID] ' = ' check=STRING ')';
@@ -75,10 +80,10 @@ IfStatement:
 	'{' return=AbstractCondition '}';
 
 If:
-	'If' IfStatement;
+	'If' stmt=IfStatement;
 
 ElseIf:
-	'ElseIf' IfStatement;
+	'ElseIf' stmt=IfStatement;
 
 Else:
 	'Else {' (return=AbstractCondition)
