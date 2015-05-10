@@ -22,7 +22,7 @@ Step:
 	'step' label=STRING? name=ID '{'
 	(predecessor+=Predecessor)?
 	(successor+=Successor)?
-	(elements+=ComponentReference)*
+	elements+=ComponentReference*
 	'}';
 
 ComponentReference:
@@ -104,7 +104,7 @@ Description:
 	'description: ' value=STRING;
 
 ValueList:
-	'values: [' values+=ValueType* ']';
+	{ValueList} 'values: [' values+=ValueType* ']';
 
 	/**
  * Einfacher Wert

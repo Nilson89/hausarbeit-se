@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
+import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
 
 /**
  * Generates code from your model files on save.
@@ -121,12 +122,86 @@ class XconfiguratorGenerator implements IGenerator {
 				<div class="col-xs-12">
 			    	<div class="col-md-12 well text-center">
 			        	 <h1> STEP «stepIndex»</h1>
+			        	 	«showComponents(step)»
 			            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Activate Step «stepIndex+1»</button>
+			            	 «generateButtonScript(stepIndex+1)»
 			        </div>
 			    </div>
 			</div>
 			«stepIndex++»
 		«ENDFOR»
+		'''
+	}
+	
+	def generateButtonScript(int i) {
+		return '''
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+			    <!-- Include all compiled plugins (below), or include individual files as needed -->
+			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+			    
+			    <!-- Custom JS-Logic -->
+			    <script type="text/javascript">
+			        $(document).ready(function() {
+			      var navListItems = $('ul.setup-panel li a'),
+			          allWells = $('.setup-content');
+					
+					    allWells.hide();
+					
+					    navListItems.click(function(e)
+					    {
+					        e.preventDefault();
+					        var $target = $($(this).attr('href')),
+					            $item = $(this).closest('li');
+					        
+					        if (!$item.hasClass('disabled')) {
+					            navListItems.closest('li').removeClass('active');
+					            $item.addClass('active');
+					            allWells.hide();
+					            $target.show();
+					        }
+					    });
+					    
+					    $('ul.setup-panel li.active a').trigger('click');
+					    
+					    // DEMO ONLY //
+					    $('#activate-step-«i»').on('click', function(e) {
+					        $('ul.setup-panel li:eq(1)').removeClass('disabled');
+					        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
+					        $(this).remove();
+					    })    
+					});
+					  </script>
+					  
+		
+		'''
+	}
+	
+	def showComponents(Step step) {
+		return '''
+		«FOR component : step.elements»
+			«showComponent(component)»
+		«ENDFOR»
+		//TODO
+		'''
+	}
+	
+	def showComponent(ComponentReference reference) {
+		return '''
+			<div class="col-xs-12">
+			<h4 class="list-group-item-heading">«reference.component.label»</h4>
+			<p>
+				«reference.component.description»
+			</p>
+			«FOR value : reference.component.values»
+				<p>
+					<div class="radio">
+						<label><input type="radio" name="Options">«value.values»</label>
+					</div>
+				</p>
+				<br>
+			«ENDFOR»
+			</div>
 		'''
 	}
 		 
@@ -236,45 +311,45 @@ class XconfiguratorGenerator implements IGenerator {
 «««			         </div>
 «««			     </div>
 			    </div>
-			
-			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-			    <!-- Include all compiled plugins (below), or include individual files as needed -->
-			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-			    
-			    <!-- Custom JS-Logic -->
-			    <script type="text/javascript">
-			        $(document).ready(function() {
-			      var navListItems = $('ul.setup-panel li a'),
-			          allWells = $('.setup-content');
-					
-					    allWells.hide();
-					
-					    navListItems.click(function(e)
-					    {
-					        e.preventDefault();
-					        var $target = $($(this).attr('href')),
-					            $item = $(this).closest('li');
-					        
-					        if (!$item.hasClass('disabled')) {
-					            navListItems.closest('li').removeClass('active');
-					            $item.addClass('active');
-					            allWells.hide();
-					            $target.show();
-					        }
-					    });
-					    
-					    $('ul.setup-panel li.active a').trigger('click');
-					    
-					    // DEMO ONLY //
-					    $('#activate-step-2').on('click', function(e) {
-					        $('ul.setup-panel li:eq(1)').removeClass('disabled');
-					        $('ul.setup-panel li a[href="#step-2"]').trigger('click');
-					        $(this).remove();
-					    })    
-					});
-					  </script>
-					  
+«««			
+«««			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+«««			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+«««			    <!-- Include all compiled plugins (below), or include individual files as needed -->
+«««			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+«««			    
+«««			    <!-- Custom JS-Logic -->
+«««			    <script type="text/javascript">
+«««			        $(document).ready(function() {
+«««			      var navListItems = $('ul.setup-panel li a'),
+«««			          allWells = $('.setup-content');
+«««					
+«««					    allWells.hide();
+«««					
+«««					    navListItems.click(function(e)
+«««					    {
+«««					        e.preventDefault();
+«««					        var $target = $($(this).attr('href')),
+«««					            $item = $(this).closest('li');
+«««					        
+«««					        if (!$item.hasClass('disabled')) {
+«««					            navListItems.closest('li').removeClass('active');
+«««					            $item.addClass('active');
+«««					            allWells.hide();
+«««					            $target.show();
+«««					        }
+«««					    });
+«««					    
+«««					    $('ul.setup-panel li.active a').trigger('click');
+«««					    
+«««					    // DEMO ONLY //
+«««					    $('#activate-step-2').on('click', function(e) {
+«««					        $('ul.setup-panel li:eq(1)').removeClass('disabled');
+«««					        $('ul.setup-panel li a[href="#step-2"]').trigger('click');
+«««					        $(this).remove();
+«««					    })    
+«««					});
+«««					  </script>
+«««					  
 					</body>
 			</html>
 		'''
