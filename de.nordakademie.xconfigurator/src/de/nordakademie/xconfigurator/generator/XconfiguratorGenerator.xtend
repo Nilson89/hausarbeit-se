@@ -3,13 +3,8 @@
  */
 package de.nordakademie.xconfigurator.generator
 
-import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
-import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
 import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
-import de.nordakademie.xconfigurator.xconfigurator.Boolean
 import de.nordakademie.xconfigurator.xconfigurator.Component
-import de.nordakademie.xconfigurator.xconfigurator.ElseIf
-import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import java.util.ArrayList
@@ -24,6 +19,8 @@ import org.eclipse.xtext.generator.IGenerator
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class XconfiguratorGenerator implements IGenerator {
+		
+		var ParseCondition parseCondition = new ParseCondition()
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 
 		/* Generate Application-Index */
@@ -79,54 +76,15 @@ class XconfiguratorGenerator implements IGenerator {
 	 	return null
  	}
  	
- 	//TODO
  	def boolean isVisible(Component component) {
+ 		var boolean result = true
  		var EList<AbstractVisible> visibility = component.visibility
- 		for(AbstractVisible visible : visibility) {
-		var result = parse(visible.condition)
+ 			for(AbstractVisible visible : visibility) {
+		result = (result && parseCondition.parse(visible.condition))
  		}
- 		return false
+ 		return result
  	}
-		
-	def boolean parse(IfStatement visible) {
-		//TODO
-		return false
-	}
- 	
- 	def boolean parse(AbstractCondition visible) {
-		if (visible instanceof Boolean) {
-			return parse(visible as Boolean)
-		} else if (visible instanceof AbstractIfCondition) {
-			return parse(visible as AbstractIfCondition)
-		} else {
-			return false
-		}
-	}
-	
-	def boolean parse(AbstractIfCondition visible) {		
-		if(parse(visible.^if.stmt)) {
-			return parse(visible.^if.stmt.^return)
-		} else if (visible.getElseif.size > 0) {
-			var ElseIf clause = parse(visible.elseif)
-			if (clause != null) {
-				return parse(clause.stmt.^return)
-			}
-		} else {
-			return parse(visible.^else.^return)
-		}
-	}	
-		
-	def ElseIf parse(EList<ElseIf> visible) {
-		if (visible.size > 0) return null;
-		for (ElseIf clause : visible) {
-			if (parse(clause.stmt)) return clause
-		}
-		return null
-	}
-	
-	def boolean parse(Boolean visible) {
-		return visible.boolean
-	}
+
 	 
 	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
@@ -140,7 +98,9 @@ class XconfiguratorGenerator implements IGenerator {
 				<a href="#step-«stepIndex++»">
 			    <h4 class="list-group-item-heading">«step.name»</h4>
 			    <p class="list-group-item-text">«step.name»</p>
-«««			    <p class="list-group-item-text">«isVisible(step.elements.get(0).component)»</p>
+			    «FOR component : step.elements»
+			    <p class="list-group-item-text">«component.component.name» " is visible: " «isVisible(component.component)»</p>
+			    «ENDFOR»
 			   	</a>
 			</li>
 		«ENDFOR»
