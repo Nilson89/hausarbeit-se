@@ -199,7 +199,7 @@ class XconfiguratorGenerator implements IGenerator {
 					    
 					    // DEMO ONLY //
 					    $('#activate-step-«i»').on('click', function(e) {
-					        $('ul.setup-panel li:eq(1)').removeClass('disabled');
+					        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
 					        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
 					        $(this).remove();
 					    })    
