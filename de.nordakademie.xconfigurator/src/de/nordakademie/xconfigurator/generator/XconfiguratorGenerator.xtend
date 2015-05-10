@@ -133,6 +133,37 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	def showComponents(Step step) {
+		return '''
+		«FOR component : step.elements»
+			«showComponent(component)»
+		«ENDFOR»
+		'''
+	}
+	
+	def showComponent(ComponentReference reference) {
+		return '''
+			<div class="col-xs-12">
+			<h4 class="list-group-item-heading">«reference.component.label»</h4>
+			<p>
+				«reference.component.description»
+			</p>
+			«FOR valueList : reference.component.values»
+				«FOR value : valueList.values»
+					<p>
+						<div class="radio">
+							<label><input type="radio" name="Options">«value.value»</label>
+						</div>
+					</p>
+					<br>
+				«ENDFOR»
+			«ENDFOR»
+			</div>
+		'''
+	}
+	
+	
+	
 	def generateButtonScript(int i) {
 		return '''
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -177,33 +208,6 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
-	def showComponents(Step step) {
-		return '''
-		«FOR component : step.elements»
-			«showComponent(component)»
-		«ENDFOR»
-		//TODO
-		'''
-	}
-	
-	def showComponent(ComponentReference reference) {
-		return '''
-			<div class="col-xs-12">
-			<h4 class="list-group-item-heading">«reference.component.label»</h4>
-			<p>
-				«reference.component.description»
-			</p>
-			«FOR value : reference.component.values»
-				<p>
-					<div class="radio">
-						<label><input type="radio" name="Options">«value.values»</label>
-					</div>
-				</p>
-				<br>
-			«ENDFOR»
-			</div>
-		'''
-	}
 		 
 	def application(Xconfigurator xconf) {
 		return '''
