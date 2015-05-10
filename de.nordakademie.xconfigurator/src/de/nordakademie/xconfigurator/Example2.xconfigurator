@@ -4,12 +4,13 @@
 
 step Start {
 	successor <Configure_types>
+	component <models_audi_pkw>
 }
 
-step Configure_types {
+step "Label" Configure_types {
 	predecessor <Start>
 	successor<Configure_manufacturers>
-	component <types>
+	component <doors_kfz>
 }
 
 step Configure_manufacturers {
@@ -21,7 +22,7 @@ step Configure_manufacturers {
 step Configure_model {
 	predecessor <Configure_manufacturers>
 	successor <Configure_motor>
-	component <manufacturer_kfz>
+	component <models_audi_pkw>
 }
 
 step Configure_motor {
@@ -53,6 +54,7 @@ component "Fahrzeugtypen" types {
 values: ["PKW" "LKW" "Bike"]
 visible: [true]
 description: "Verschiedene Fahrzeugtypen"
+selected: ["PKW"]
 }
 
 /*
@@ -63,24 +65,28 @@ component "Hersteller" manufacturer_kfz{
 values: ["Mercedes" "Citroen"]
 visible: [If (types = "PKW") Or (types = "LKW") {true} Else {false}]
 description: "Hersteller, die LKWs und PKWs produzieren"
+selected: ["Mercedes"]
 }
 
 component "Hersteller" manufacturer_PKW_only{
 values: ["BMW" "Audi"]
 visible: [If (types = "PKW") {true} Else {false}]
 description: "PKW-Hersteller"
+selected: ["BMW"]
 }
 
 component "Hersteller" manufacturer_LKW_only{
 values: ["MAN" "Keine Ahnung"]
 visible: [If (types = "LKW") {true} Else {false}]
 description: "LKW-Hersteller"
+selected: ["MAN"]
 }
 
 component "Hersteller" manufacturer_Bike{
 values: ["Ducati" "Kawasaki" "Yamaha"]
 visible: [If (types = "Bike") {true} Else {false}]
 description: "Motorrad-Hersteller"
+selected: ["Yamaha"]
 }
 
 /*
@@ -95,7 +101,7 @@ description: "Audi-Fahrzeug-Modelle"
 
 component "Modelle" models_bmw_pkw{
 values: ["M1" "M3" "X1" "Z4"]
-visible: [If (manufacturer_PKW_only = "BMW") And (types = "PKW") {true} Else {false}]
+visible: [If (manufacturer_PKW_only = "BMW") And (types = "Bike") {true} Else {false}]
 description: "BMW-Fahrzeug-Modelle"
 }
 
