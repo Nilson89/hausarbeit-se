@@ -22,7 +22,7 @@ Step:
 	'step' label=STRING? name=ID '{'
 	(predecessor+=Predecessor)?
 	(successor+=Successor)?
-	elements+=ComponentReference*
+	(elements+=ComponentReference)*
 	'}';
 
 ComponentReference:

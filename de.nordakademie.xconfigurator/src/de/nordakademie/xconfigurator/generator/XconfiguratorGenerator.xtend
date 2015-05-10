@@ -146,7 +146,9 @@ class XconfiguratorGenerator implements IGenerator {
 			<div class="col-xs-12">
 			<h4 class="list-group-item-heading">«reference.component.label»</h4>
 			<p>
+			«IF reference.component.description != null»
 				«reference.component.description.value»
+			«ENDIF»
 			</p>
 			«FOR valueList : reference.component.values»
 				«FOR value : valueList.values»
