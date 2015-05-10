@@ -85,7 +85,7 @@ class XconfiguratorGenerator implements IGenerator {
  		return result
  	}
 
-	 
+//	 TODO Demo s.u.
 	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
 	 	return '''
@@ -98,6 +98,7 @@ class XconfiguratorGenerator implements IGenerator {
 				<a href="#step-«stepIndex++»">
 			    <h4 class="list-group-item-heading">«step.name»</h4>
 			    <p class="list-group-item-text">«step.name»</p>
+«««			    TODO DEMO
 			    «FOR component : step.elements»
 			    <p class="list-group-item-text">«component.component.name» " is visible: " «isVisible(component.component)»</p>
 			    «ENDFOR»
