@@ -123,8 +123,10 @@ class XconfiguratorGenerator implements IGenerator {
 			    	<div class="col-md-12 well text-center">
 			        	 <h1> STEP «stepIndex»</h1>
 			        	 	«showComponents(step)»
+			            	 «IF !step.successor.isEmpty»
 			            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Activate Step «stepIndex+1»</button>
 			            	 «generateButtonScript(stepIndex+1)»
+			            	 «ENDIF»
 			        </div>
 			    </div>
 			</div>
