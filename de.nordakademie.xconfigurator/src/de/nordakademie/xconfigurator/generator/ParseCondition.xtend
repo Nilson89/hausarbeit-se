@@ -12,9 +12,8 @@ import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import org.eclipse.emf.common.util.EList
 
 /**
- * Generates code from your model files on save.
+ * Parses a AbstractCondition into a boolean value
  * 
- * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class ParseCondition {
 			
