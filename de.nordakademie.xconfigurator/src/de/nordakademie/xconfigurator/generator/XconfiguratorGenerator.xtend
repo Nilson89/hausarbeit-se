@@ -105,10 +105,30 @@ class XconfiguratorGenerator implements IGenerator {
 			   	</a>
 			</li>
 		«ENDFOR»
-			    	        	
+			</ul>
+			</div>
+		</div>
+		«showContent(orderedStepList)»	    	        	
 		'''
-	 	
 	 }
+	 
+	 
+	def showContent(ArrayList<Step> steps) {
+		var stepIndex=1
+		return '''
+		«FOR step:steps»
+			<div class="row setup-content" id="step-«stepIndex»">
+				<div class="col-xs-12">
+			    	<div class="col-md-12 well text-center">
+			        	 <h1> STEP «stepIndex»</h1>
+			            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Activate Step «stepIndex+1»</button>
+			        </div>
+			    </div>
+			</div>
+			«stepIndex++»
+		«ENDFOR»
+		'''
+	}
 		 
 	def application(Xconfigurator xconf) {
 		return '''
@@ -190,31 +210,31 @@ class XconfiguratorGenerator implements IGenerator {
 «««			    	                <h4 class="list-group-item-heading">Step 3</h4>
 «««			    	                <p class="list-group-item-text">Third step description</p>
 «««			    	            </a></li>
-			    	        </ul>
-			    	    </div>
-			  </div>
-			     <div class="row setup-content" id="step-1">
-			         <div class="col-xs-12">
-			             <div class="col-md-12 well text-center">
-			                 <h1> STEP 1</h1>
-			                 <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
-			             </div>
-			         </div>
-			     </div>
-			     <div class="row setup-content" id="step-2">
-			         <div class="col-xs-12">
-			             <div class="col-md-12 well">
-			                 <h1 class="text-center"> STEP 2</h1>
-			             </div>
-			         </div>
-			     </div>
-			     <div class="row setup-content" id="step-3">
-			         <div class="col-xs-12">
-			             <div class="col-md-12 well">
-			                 <h1 class="text-center"> STEP 3</h1>
-			             </div>
-			         </div>
-			     </div>
+«««			    	        </ul>
+«««			    	    </div>
+«««			  </div>
+«««			     <div class="row setup-content" id="step-1">
+«««			         <div class="col-xs-12">
+«««			             <div class="col-md-12 well text-center">
+«««			                 <h1> STEP 1</h1>
+«««			                 <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
+«««			             </div>
+«««			         </div>
+«««			     </div>
+«««			     <div class="row setup-content" id="step-2">
+«««			         <div class="col-xs-12">
+«««			             <div class="col-md-12 well">
+«««			                 <h1 class="text-center"> STEP 2</h1>
+«««			             </div>
+«««			         </div>
+«««			     </div>
+«««			     <div class="row setup-content" id="step-3">
+«««			         <div class="col-xs-12">
+«««			             <div class="col-md-12 well">
+«««			                 <h1 class="text-center"> STEP 3</h1>
+«««			             </div>
+«««			         </div>
+«««			     </div>
 			    </div>
 			
 			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -259,6 +279,7 @@ class XconfiguratorGenerator implements IGenerator {
 			</html>
 		'''
 	}
+
 	
 	def toHtml(Step s) '''
 		<xhtml>
