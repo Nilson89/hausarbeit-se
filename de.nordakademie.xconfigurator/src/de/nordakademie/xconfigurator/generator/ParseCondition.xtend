@@ -17,30 +17,6 @@ import org.eclipse.emf.common.util.EList
  */
 class ParseCondition {
 			
-	def boolean parse(IfStatement visible) {
-		var boolean result = parse(visible.conditions.get(0))
-		if (visible.type.size > 0) {
-			for (var int i = 1; i-1 < visible.type.size; i++) {
-				var String type = visible.type.get(i-1)
-				if (type.equals("And")) {
-					result = (result && parse(visible.conditions.get(i)))
-				} else if (type.equals("Or")) {
-					if (result) return true
-					result = parse(visible.conditions.get(i))
-				}
-			}
-		}
-		return result
-	}
-		
-	def boolean parse(Condition condition) {
-		if (condition.component.selected == null) {
-			return false;
-		} else {
-			return condition.component.selected.value.equals(condition.check)
-		}
-	}
- 	
  	//TODO: Better way than instanceof?
  	def boolean parse(AbstractCondition visible) {
 		if (visible instanceof Boolean) {
@@ -64,6 +40,30 @@ class ParseCondition {
 			return parse(visible.^else.^return)
 		}
 	}	
+	
+		def boolean parse(IfStatement visible) {
+		var boolean result = parse(visible.conditions.get(0))
+		if (visible.type.size > 0) {
+			for (var int i = 1; i-1 < visible.type.size; i++) {
+				var String type = visible.type.get(i-1)
+				if (type.equals("And")) {
+					result = (result && parse(visible.conditions.get(i)))
+				} else if (type.equals("Or")) {
+					if (result) return true
+					result = parse(visible.conditions.get(i))
+				}
+			}
+		}
+		return result
+	}
+		
+	def boolean parse(Condition condition) {
+		if (condition.component.selected == null) {
+			return false;
+		} else {
+			return condition.component.selected.value.equals(condition.check)
+		}
+	}
 		
 	def ElseIf parse(EList<ElseIf> visible) {
 		if (visible.size == 0) return null;
