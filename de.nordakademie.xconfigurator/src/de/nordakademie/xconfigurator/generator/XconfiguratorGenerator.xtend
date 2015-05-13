@@ -144,22 +144,19 @@ class XconfiguratorGenerator implements IGenerator {
 	def showComponent(ComponentReference reference) {
 		return '''
 			<div class="col-xs-12">
-			<h4 class="list-group-item-heading">«reference.component.label»</h4>
-			<p>
-			«IF reference.component.description != null»
-				«reference.component.description.value»
-			«ENDIF»
-			</p>
-			«FOR valueList : reference.component.values»
-				«FOR value : valueList.values»
-					<p>
-						<div class="radio">
-							<label><input type="radio" name="Options">«value.value»</label>
-						</div>
-					</p>
-					<br>
-				«ENDFOR»
-			«ENDFOR»
+			    <div class="form-group">
+					<label for="">«reference.component.label»</label>
+					<select class="form-control">
+						«FOR valueList : reference.component.values»
+							«FOR value : valueList.values»
+								<option>«value.value»</option>
+							«ENDFOR»
+						«ENDFOR»
+					</select>
+					«IF reference.component.description != null»
+						<p class="help-block">«reference.component.description.value»</p>
+					«ENDIF»
+			    </div>
 			</div>
 		'''
 	}
@@ -257,16 +254,6 @@ class XconfiguratorGenerator implements IGenerator {
 			    	<div class="row">
 			    	    <div class="col-xs-12">
 			    			<h1>Konfiguration</h1>
-			    			<p class="text-left">
-			    				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, 
-			    				sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, 
-			    				sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. 
-			    				Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
-			    				Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt 
-			    				ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo 
-			    				duo dolores et ea rebum. Stet clita kasd gubergren, 
-			    				no sea takimata sanctus est Lorem ipsum dolor sit amet.
-			    			</p>
 			    		</div>
 			    	</div>
 			    	
