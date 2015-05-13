@@ -207,6 +207,7 @@ class XconfiguratorGenerator implements IGenerator {
 		 
 	def application(Xconfigurator xconf) {
 		return '''
+		bdahjsbdahjs
 			<!DOCTYPE html>
 			<html lang="en">
 			  <head>
