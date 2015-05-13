@@ -21,7 +21,8 @@ import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
  */
 class XconfiguratorGenerator implements IGenerator {
 		
-		var ParseCondition parseCondition = new ParseCondition()
+	var ParseCondition parseCondition = new ParseCondition()
+	
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 
 		/* Generate Application-Index */
@@ -106,9 +107,6 @@ class XconfiguratorGenerator implements IGenerator {
 			   	</a>
 			</li>
 		«ENDFOR»
-			</ul>
-			</div>
-		</div>
 		«showContent(orderedStepList)»	    	        	
 		'''
 	 }
@@ -169,46 +167,39 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	
 	def generateButtonScript(int i) {
-		return '''
-		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-			    <!-- Include all compiled plugins (below), or include individual files as needed -->
-			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-			    
-			    <!-- Custom JS-Logic -->
-			    <script type="text/javascript">
-			        $(document).ready(function() {
-			      var navListItems = $('ul.setup-panel li a'),
-			          allWells = $('.setup-content');
-					
-					    allWells.hide();
-					
-					    navListItems.click(function(e)
-					    {
-					        e.preventDefault();
-					        var $target = $($(this).attr('href')),
-					            $item = $(this).closest('li');
-					        
-					        if (!$item.hasClass('disabled')) {
-					            navListItems.closest('li').removeClass('active');
-					            $item.addClass('active');
-					            allWells.hide();
-					            $target.show();
-					        }
-					    });
-					    
-					    $('ul.setup-panel li.active a').trigger('click');
-					    
-					    // DEMO ONLY //
-					    $('#activate-step-«i»').on('click', function(e) {
-					        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
-					        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
-					        $(this).remove();
-					    })    
-					});
-					  </script>
-					  
-		
+		return '''			    
+		    <!-- Custom JS-Logic -->
+		    <script type="text/javascript">
+		        $(document).ready(function() {
+	      			var navListItems = $('ul.setup-panel li a'),
+		          	allWells = $('.setup-content');
+				
+				    allWells.hide();
+				
+				    navListItems.click(function(e)
+				    {
+				        e.preventDefault();
+				        var $target = $($(this).attr('href')),
+				            $item = $(this).closest('li');
+				        
+				        if (!$item.hasClass('disabled')) {
+				            navListItems.closest('li').removeClass('active');
+				            $item.addClass('active');
+				            allWells.hide();
+				            $target.show();
+				        }
+				    });
+				    
+				    $('ul.setup-panel li.active a').trigger('click');
+				    
+				    // DEMO ONLY //
+				    $('#activate-step-«i»').on('click', function(e) {
+				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
+				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
+				        $(this).remove();
+				    })    
+				});
+		  	</script>
 		'''
 	}
 	
@@ -232,6 +223,11 @@ class XconfiguratorGenerator implements IGenerator {
 			      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 			    <![endif]-->
+			    
+			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+			    <!-- Include all compiled plugins (below), or include individual files as needed -->
+			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 			  </head>
 			  <body>
 			    <nav class="navbar navbar-default">
@@ -281,85 +277,12 @@ class XconfiguratorGenerator implements IGenerator {
 «««			    	        «FOR step: xconf.steps»
 								«generateStepHierarchy(xconf)»
 «««			    	        «ENDFOR»
-«««			    	            <li class="active"><a href="#step-1">
-«««			    	                <h4 class="list-group-item-heading">Step 10</h4>
-«««			    	                <p class="list-group-item-text">First step description</p>
-«««			    	            </a></li>
-«««			    	            <li class="disabled"><a href="#step-2">
-«««			    	                <h4 class="list-group-item-heading">Step 2</h4>
-«««			    	                <p class="list-group-item-text">Second step description</p>
-«««			    	            </a></li>
-«««			    	            <li class="disabled"><a href="#step-3">
-«««			    	                <h4 class="list-group-item-heading">Step 3</h4>
-«««			    	                <p class="list-group-item-text">Third step description</p>
-«««			    	            </a></li>
-«««			    	        </ul>
-«««			    	    </div>
-«««			  </div>
-«««			     <div class="row setup-content" id="step-1">
-«««			         <div class="col-xs-12">
-«««			             <div class="col-md-12 well text-center">
-«««			                 <h1> STEP 1</h1>
-«««			                 <button id="activate-step-2" class="btn btn-primary btn-lg">Activate Step 2</button>
-«««			             </div>
-«««			         </div>
-«««			     </div>
-«««			     <div class="row setup-content" id="step-2">
-«««			         <div class="col-xs-12">
-«««			             <div class="col-md-12 well">
-«««			                 <h1 class="text-center"> STEP 2</h1>
-«««			             </div>
-«««			         </div>
-«««			     </div>
-«««			     <div class="row setup-content" id="step-3">
-«««			         <div class="col-xs-12">
-«««			             <div class="col-md-12 well">
-«««			                 <h1 class="text-center"> STEP 3</h1>
-«««			             </div>
-«««			         </div>
-«««			     </div>
-			    </div>
-«««			
-«««			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-«««			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-«««			    <!-- Include all compiled plugins (below), or include individual files as needed -->
-«««			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-«««			    
-«««			    <!-- Custom JS-Logic -->
-«««			    <script type="text/javascript">
-«««			        $(document).ready(function() {
-«««			      var navListItems = $('ul.setup-panel li a'),
-«««			          allWells = $('.setup-content');
-«««					
-«««					    allWells.hide();
-«««					
-«««					    navListItems.click(function(e)
-«««					    {
-«««					        e.preventDefault();
-«««					        var $target = $($(this).attr('href')),
-«««					            $item = $(this).closest('li');
-«««					        
-«««					        if (!$item.hasClass('disabled')) {
-«««					            navListItems.closest('li').removeClass('active');
-«««					            $item.addClass('active');
-«««					            allWells.hide();
-«««					            $target.show();
-«««					        }
-«««					    });
-«««					    
-«««					    $('ul.setup-panel li.active a').trigger('click');
-«««					    
-«««					    // DEMO ONLY //
-«««					    $('#activate-step-2').on('click', function(e) {
-«««					        $('ul.setup-panel li:eq(1)').removeClass('disabled');
-«««					        $('ul.setup-panel li a[href="#step-2"]').trigger('click');
-«««					        $(this).remove();
-«««					    })    
-«««					});
-«««					  </script>
-«««					  
-					</body>
-			</html>
+							</ul>
+						</div>
+					</div>
+			    </div>			  
+			</body>
+		</html>
 		'''
 	}
 
