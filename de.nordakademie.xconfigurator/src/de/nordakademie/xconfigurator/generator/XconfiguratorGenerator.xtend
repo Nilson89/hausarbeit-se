@@ -87,23 +87,13 @@ class XconfiguratorGenerator implements IGenerator {
  		return result
  	}
 
-//	 TODO Demo s.u.
 	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
 	 	return '''
 		«FOR step: orderedStepList»
-			<li class="«IF stepIndex == 1»
-						active
-						«ELSE»
-						disabled
-						«ENDIF»">
+			<li class="«IF stepIndex == 1»active«ELSE»disabled«ENDIF»">
 				<a href="#step-«stepIndex++»">
-			    <h4 class="list-group-item-heading">«step.name»</h4>
-			    <p class="list-group-item-text">«step.name»</p>
-«««			    TODO DEMO
-			    «FOR component : step.elements»
-			    <p class="list-group-item-text">«component.component.name» " is visible: " «isVisible(component.component)»</p>
-			    «ENDFOR»
+			    	<h4 class="list-group-item-heading">«step.name»</h4>
 			   	</a>
 			</li>
 		«ENDFOR»
@@ -119,12 +109,14 @@ class XconfiguratorGenerator implements IGenerator {
 			<div class="row setup-content" id="step-«stepIndex»">
 				<div class="col-xs-12">
 			    	<div class="col-md-12 well text-center">
-			        	 <h1> STEP «stepIndex»</h1>
-			        	 	«showComponents(step)»
+			        	 <h1> STEP «step.name»</h1>
+			        	 <form>
+	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
-			            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Activate Step «stepIndex+1»</button>
-			            	 «generateButtonScript(stepIndex+1)»
+				            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
+				            	 «generateButtonScript(stepIndex+1)»
 			            	 «ENDIF»
+		            	 </form>
 			        </div>
 			    </div>
 			</div>
@@ -143,21 +135,21 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	def showComponent(ComponentReference reference) {
 		return '''
-			<div class="col-xs-12">
-			    <div class="form-group">
-					<label for="">«reference.component.label»</label>
-					<select class="form-control">
-						«FOR valueList : reference.component.values»
-							«FOR value : valueList.values»
-								<option>«value.value»</option>
-							«ENDFOR»
+		    <div class="form-group">
+				<label for="#component-«reference.component.name»" class="pull-left">
+					«reference.component.label»
+				</label>
+				<select class="form-control" id="component-«reference.component.name»">
+					«FOR valueList : reference.component.values»
+						«FOR value : valueList.values»
+							<option>«value.value»</option>
 						«ENDFOR»
-					</select>
-					«IF reference.component.description != null»
-						<p class="help-block">«reference.component.description.value»</p>
-					«ENDIF»
-			    </div>
-			</div>
+					«ENDFOR»
+				</select>
+				«IF reference.component.description != null»
+					<p class="help-block text-left">«reference.component.description.value»</p>
+				«ENDIF»
+		    </div>
 		'''
 	}
 	
@@ -213,6 +205,7 @@ class XconfiguratorGenerator implements IGenerator {
 			
 			    <!-- Bootstrap -->
 			    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+			    
 			
 			    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 			    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

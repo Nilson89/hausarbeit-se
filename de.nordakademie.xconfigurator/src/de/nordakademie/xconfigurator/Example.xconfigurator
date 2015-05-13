@@ -1,21 +1,49 @@
-manufacturer "Mercedes" mercedes // Collection of Cars
+/** 
+ * Start
+ */
 
-Option1:
+step Start {
+	successor <Product>
+	component <vehicle_type>
+}
 
-car "SLK" slk <mercedes> // Collection of components
-component1 "motor" 120 1376 <slk>// 120 sind PS, 1376 sind CCM //Soll Klasse allgemeine heißen, oder konkret!?   
-component2 "color" red <slk>//Enum !?
-component3 "doors" 3 <slk>// 2 < doors < 6
-component4 "wheels" 16 <slk>// 16 ist die größe in Zoll
-component5 "navigation" true <slk>// boolean
+component "Fahrzeugtyp" vehicle_type{
+	values: ['Auto' 'Motorrad']
+	visible: [true]
+}
 
-Option2:
+/**
+ * Fabrikat
+ */
+step Product {
+	predecessor<Start>
+	component<vehicle_brand_car>
+	component<vehicle_brand_motorbike>
+}
 
-car "SLK" slk <mercedes> // Collection of components; nur ein Element je Komponente möglich 
-motor 120 1376 benzin <slk>// 120 sind PS, 1376 sind CCM //nur ein Motor je Auto möglich
-motor 120 1376 diesel <slk>// 120 sind PS, 1376 sind CCM //je Motorart evtl verschiedene Unterpunkte möglich
-motor 120 1376 elektro <slk>// 120 sind PS, 1376 sind CCM
-color red <slk>//Enum !?
-doors 3 <slk>// 2 < doors < 6
-wheels 16 <slk>// 16 ist die größe in Zoll //Nicht alle Größen je Modell auswählbar
-navigation true <slk>// boolean //Navigation evtl nicht für alle Modelle auswählbar ... test
+/* Auto */
+component "Marke" vehicle_brand_car {
+	values: ['Audi' 'Volkswagen']
+	visible: [If(vehicle_type = "Auto"){true}Else {false}]
+}
+component "Modell" vehicle_brand_car_model_audi {
+	values: ['A1' 'A2' 'A3']
+	visible: [If(vehicle_brand_car = 'Audi'){true}Else {false}]
+}
+component "Modell" vehicle_brand_car_model_vw {
+	values: ['Polo' 'Golf' 'Passat']
+	visible: [If(vehicle_brand_car = 'Volkswagen'){true}Else {false}]
+}
+/* Motorrad */
+component "Marke" vehicle_brand_motorbike {
+	values: ['Honda' 'Kawasaki']
+	visible: [If(vehicle_type = "Motorrad"){true}Else {false}]
+}
+component "Modell" vehicle_brand_motorbike_model_kawasaki {
+	values: ['ER6n' 'Z800' 'Z800e' 'Z1000']
+	visible: [If(vehicle_brand_motorbike = 'Kawasaki'){true}Else {false}]
+}
+component "Modell" vehicle_brand_motorbike_model_honda {
+	values: ['Hornet' 'CBF600' 'Fireblade']
+	visible: [If(vehicle_brand_motorbike = 'Kawasaki'){true}Else {false}]
+}
