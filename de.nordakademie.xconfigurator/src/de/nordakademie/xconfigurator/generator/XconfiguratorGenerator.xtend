@@ -149,6 +149,7 @@ class XconfiguratorGenerator implements IGenerator {
 				«IF reference.component.description != null»
 					<p class="help-block text-left">«reference.component.description.value»</p>
 				«ENDIF»
+				«generateComponentScript(reference.component)»
 		    </div>
 		'''
 	}
@@ -189,6 +190,17 @@ class XconfiguratorGenerator implements IGenerator {
 				    })    
 				});
 		  	</script>
+		'''
+	}
+	
+	def generateComponentScript(Component component) {
+		return '''
+			<script type="text/javascript">
+				$(document).ready(function() {
+					var «component.name» = $('#component-«component.name»');
+					console.debug(«component.name»);
+				});
+			</script>
 		'''
 	}
 	
