@@ -1,21 +1,54 @@
+/** 
+ * Start
+ */
+
 step Start {
-	successor <Configure>
-	component "Type" Type {
-		values: ["Car" "Bike"]
-		visible: [true]
-	}
-	component "Manufacturer" Manufacturer {
-		values: ["BMW" "Audi" "VW"]
-		visible: [If(Type = "Car"){true}Else {false}]
-	}
-	component "Model" Model {
-		values: []
-	}
-	component "Doors" Doors {
-		values: ["2/3" "4/5"]
-	}
+	successor <Product>
+	component <vehicle_type>
 }
 
-step Configure {
-	predecessor <Start>
+component "Fahrzeugtyp" vehicle_type{
+	values: ['Auto' 'Motorrad']
+	visible: [true]
+}
+
+/**
+ * Fabrikat
+ */
+step Product {
+	predecessor<Start>
+	component<vehicle_brand_car>
+	component<vehicle_brand_car_model_audi>
+	component<vehicle_brand_car_model_vw>
+	component<vehicle_brand_motorbike>
+	component<vehicle_brand_motorbike_model_honda>
+	component<vehicle_brand_motorbike_model_kawasaki>
+}
+
+
+/* Auto */
+component "Marke" vehicle_brand_car {
+	values: ['Audi' 'Volkswagen']
+	visible: [If(vehicle_type = "Auto"){true}Else {false}]
+}
+component "Modell" vehicle_brand_car_model_audi {
+	values: ['A1' 'A2' 'A3']
+	visible: [If(vehicle_brand_car = 'Audi'){true}Else {false}]
+}
+component "Modell" vehicle_brand_car_model_vw {
+	values: ['Polo' 'Golf' 'Passat']
+	visible: [If(vehicle_brand_car = 'Volkswagen'){true}Else {false}]
+}
+/* Motorrad */
+component "Marke" vehicle_brand_motorbike {
+	values: ['Honda' 'Kawasaki']
+	visible: [If(vehicle_type = "Motorrad"){true}Else {false}]
+}
+component "Modell" vehicle_brand_motorbike_model_kawasaki {
+	values: ['ER6n' 'Z800' 'Z800e' 'Z1000']
+	visible: [If(vehicle_brand_motorbike = 'Kawasaki'){true}Else {false}]
+}
+component "Modell" vehicle_brand_motorbike_model_honda {
+	values: ['Hornet' 'CBF600' 'Fireblade']
+	visible: [If(vehicle_brand_motorbike = 'Honda'){true}Else {false}]
 }

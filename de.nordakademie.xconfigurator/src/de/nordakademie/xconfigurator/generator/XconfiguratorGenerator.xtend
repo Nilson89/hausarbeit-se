@@ -296,7 +296,10 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	def parseComponentVisibleCondition(Condition condition) {
 		return '''
-			$('#component-«condition.component.name»').val() == '«condition.check»'
+			(
+				$('#component-«condition.component.name»').val() == '«condition.check»'
+				&& $('#component-«condition.component.name»').parent('.form-group').css('display') == 'block'
+			)
 		'''
 	}
 	
@@ -334,6 +337,9 @@ class XconfiguratorGenerator implements IGenerator {
 							} else {
 								return false;
 							}
+						},
+						isVisible: function() {
+							return this.checkCondition();
 						}
 					};
 					
