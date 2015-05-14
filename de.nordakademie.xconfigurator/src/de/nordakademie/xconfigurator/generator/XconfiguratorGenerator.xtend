@@ -113,11 +113,12 @@ class XconfiguratorGenerator implements IGenerator {
 				    	<div class="col-md-12 well text-center">
 				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
+			            	 <p align="right">
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="«saveButtonName»«stepIndex»" class="btn btn-primary btn-lg">Speichern</button>
+				            	 <button id="«saveButtonName»«stepIndex»" class="btn btn-primary btn-lg">Weiter</button>
 				            	 «generateButtonScript(stepIndex, saveButtonName)»
 			            	 «ENDIF»
-			            	 <p align="left">
+			            	 </p><p align="left">
 			            	 «IF !step.predecessor.isEmpty»
 								 <button id="«backButtonName»«stepIndex-2»" class="btn btn-primary btn-lg">Zurueck</button>
 								 «generateButtonScript(stepIndex-2, backButtonName)»
