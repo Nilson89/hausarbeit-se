@@ -117,11 +117,12 @@ class XconfiguratorGenerator implements IGenerator {
 				            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
 				            	 «generateButtonScript(stepIndex+1)»
 			            	 «ENDIF»
-			            	 
+			            	 <p align="left">
 			            	 «IF !step.predecessor.isEmpty»
 								 <button id="go-back-step-«stepIndex-1»" class="btn btn-primary btn-lg">Zurueck</button>
 								 «generateBackButtonScript(stepIndex-1)»
 							 «ENDIF»
+							 </p>
 				        </div>
 				    </div>
 				</div>
