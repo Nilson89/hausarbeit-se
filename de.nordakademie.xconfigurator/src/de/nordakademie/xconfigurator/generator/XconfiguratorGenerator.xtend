@@ -105,6 +105,8 @@ class XconfiguratorGenerator implements IGenerator {
 	 
 	def showContent(ArrayList<Step> steps) {
 		var stepIndex=1
+		var backButtonName = "go-back-button"
+		var saveButtonName = "save-button"
 		return '''
 		<form id="xconfigurator-form">
 			«FOR step:steps»
@@ -114,13 +116,13 @@ class XconfiguratorGenerator implements IGenerator {
 				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
-				            	 «generateButtonScript(stepIndex+1)»
+				            	 <button id="«saveButtonName»«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
+				            	 «generateButtonScript(stepIndex+1, saveButtonName)»
 			            	 «ENDIF»
 			            	 <p align="left">
 			            	 «IF !step.predecessor.isEmpty»
-								 <button id="go-back-step-«stepIndex-1»" class="btn btn-primary btn-lg">Zurueck</button>
-								 «generateBackButtonScript(stepIndex-1)»
+								 <button id="«backButtonName»«stepIndex-1»" class="btn btn-primary btn-lg">Zurueck</button>
+								 «generateButtonScript(stepIndex-1, backButtonName)»
 							 «ENDIF»
 							 </p>
 				        </div>
@@ -142,6 +144,7 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	def showComponent(ComponentReference reference) {
 		return '''
+		
 		    <div class="form-group">
 				<label for="#component-«reference.component.name»" class="pull-left">
 					«reference.component.label»
@@ -161,7 +164,7 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	
 	
-	def generateButtonScript(int i) {
+	def generateButtonScript(int i, String buttonName) {
 		return '''			    
 		    <!-- Custom JS-Logic -->
 		    <script type="text/javascript">
@@ -187,8 +190,7 @@ class XconfiguratorGenerator implements IGenerator {
 				    
 				    $('ul.setup-panel li.active a').trigger('click');
 				    
-				    // DEMO ONLY //
-				    $('#activate-step-«i»').on('click', function(e) {
+				    $('#«buttonName»«i»').on('click', function(e) {
 				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
 				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
 				        $(this).remove();
@@ -197,44 +199,6 @@ class XconfiguratorGenerator implements IGenerator {
 		  	</script>
 		'''
 	}
-	
-		def generateBackButtonScript(int i) {
-		return '''			    
-		    <!-- Custom JS-Logic -->
-		    <script type="text/javascript">
-		        $(document).ready(function() {
-	      			var navListItems = $('ul.setup-panel li a'),
-		          	allWells = $('.setup-content');
-				
-				    allWells.hide();
-				
-				    navListItems.click(function(e)
-				    {
-				        e.preventDefault();
-				        var $target = $($(this).attr('href')),
-				            $item = $(this).closest('li');
-				        
-				        if (!$item.hasClass('disabled')) {
-				            navListItems.closest('li').removeClass('active');
-				            $item.addClass('active');
-				            allWells.hide();
-				            $target.show();
-				        }
-				    });
-				    
-				    $('ul.setup-panel li.active a').trigger('click');
-				    
-				    // DEMO ONLY //
-				    $('#go-back-step-«i»').on('click', function(e) {
-				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
-				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
-				        $(this).remove();
-				    })    
-				});
-		  	</script>
-		'''
-	}
-	
 
 	def generateComponentScript(Component component) {
 		return '''
