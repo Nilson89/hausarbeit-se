@@ -41,7 +41,7 @@ class ParseCondition {
 		}
 	}	
 	
-		def boolean parse(IfStatement visible) {
+	def boolean parse(IfStatement visible) {
 		var boolean result = parse(visible.conditions.get(0))
 		if (visible.type.size > 0) {
 			for (var int i = 1; i-1 < visible.type.size; i++) {

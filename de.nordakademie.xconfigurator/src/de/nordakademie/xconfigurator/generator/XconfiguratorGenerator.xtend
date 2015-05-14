@@ -240,7 +240,7 @@ class XconfiguratorGenerator implements IGenerator {
 			<script type="text/javascript">
 				$(document).ready(function() {
 					/* Create Component-Object */
-					var component_«component.name»_visible = «parseComponentVisible(component)»;
+					var component_«component.name»_visible = «parseComponentVisible(component.visibility.condition)»;
 					var component_«component.name» = new $.XComponent('#component-«component.name»', component_«component.name»_visible);
 					component_«component.name».changeVisibility();
 					
@@ -254,12 +254,12 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
-	def parseComponentVisible(Component component) {
+	def parseComponentVisible(AbstractCondition visible) {
 		return '''
-			«IF component.visibility.condition instanceof Boolean»
-				«parseComponentVisibleBoolean(component.visibility.condition as Boolean)»
-			«ELSEIF component.visibility.condition instanceof AbstractIfCondition»
-				false
+			«IF visible instanceof Boolean»
+				«parseComponentVisibleBoolean(visible as Boolean)»
+			«ELSEIF visible instanceof AbstractIfCondition»
+				«parseComponentVisibleAbstractIf(visible as AbstractIfCondition)»
 			«ELSE»
 				false
 			«ENDIF»
@@ -268,6 +268,36 @@ class XconfiguratorGenerator implements IGenerator {
 	
 	def parseComponentVisibleBoolean(Boolean visible) {
 		return visible.boolean;
+	}
+	
+	def parseComponentVisibleAbstractIf(AbstractIfCondition visible) {
+		return '''
+			function() {
+				if («parseComponentVisibleIfStatement(visible.^if.stmt)») {
+					return «parseComponentVisible(visible.^if.stmt.^return)»;
+				}
+				«IF visible.getElseif.size > 0»
+				else if () {
+					return «parseComponentVisible(visible.^else.^return)»;
+				}
+				«ENDIF»
+				else {
+					return «parseComponentVisible(visible.^else.^return)»;
+				}
+			}
+		'''
+	}
+	
+	def parseComponentVisibleIfStatement(IfStatement visible) {
+		return '''
+			«parseComponentVisibleCondition(visible.conditions.get(0))»
+		'''
+	}
+	
+	def parseComponentVisibleCondition(Condition condition) {
+		return '''
+			$('#component-«condition.component.name»').val() == '«condition.check»'
+		'''
 	}
 	
 	def jqueryComponentClass() {
@@ -299,10 +329,11 @@ class XconfiguratorGenerator implements IGenerator {
 						checkCondition: function() {
 							if (typeof this.visibleCondition === 'boolean') {
 								return this.visibleCondition;
+							} else if (typeof this.visibleCondition === 'function') {
+								return this.visibleCondition();
+							} else {
+								return false;
 							}
-							
-							/* Parse Condition */
-							console.debug('ToDo: Parse Condition');
 						}
 					};
 					
