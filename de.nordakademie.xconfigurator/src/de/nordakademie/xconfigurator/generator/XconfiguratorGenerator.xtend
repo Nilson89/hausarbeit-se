@@ -119,7 +119,7 @@ class XconfiguratorGenerator implements IGenerator {
 		            	 </form>
 		            	 <div>
 							«IF !step.predecessor.isEmpty»
-							<button id="go-back-step-«stepIndex-1»»" class="btn btn-primary btn-lg">Zurueck</button>
+							<button id="go-back-step-«stepIndex-1»" class="btn btn-primary btn-lg">Zurueck</button>
 							«generateBackButtonScript(stepIndex-1)»
 							«ENDIF»
 					</div>
