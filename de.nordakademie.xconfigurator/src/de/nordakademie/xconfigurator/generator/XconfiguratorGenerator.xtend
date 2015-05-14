@@ -7,6 +7,12 @@ import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
 import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
+import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
+import de.nordakademie.xconfigurator.xconfigurator.Boolean
+import de.nordakademie.xconfigurator.xconfigurator.Condition
+import de.nordakademie.xconfigurator.xconfigurator.ElseIf
+import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.resource.Resource
@@ -79,12 +85,7 @@ class XconfiguratorGenerator implements IGenerator {
  	}
  	
  	def boolean isVisible(Component component) {
- 		var boolean result = true
- 		var EList<AbstractVisible> visibility = component.visibility
- 			for(AbstractVisible visible : visibility) {
-		result = (result && parseCondition.parse(visible.condition))
- 		}
- 		return result
+		return parseCondition.parse(component.visibility.condition);
  	}
 
 	def displaySteps(ArrayList<Step> orderedStepList){
@@ -105,23 +106,23 @@ class XconfiguratorGenerator implements IGenerator {
 	def showContent(ArrayList<Step> steps) {
 		var stepIndex=1
 		return '''
-		«FOR step:steps»
-			<div class="row setup-content" id="step-«stepIndex»">
-				<div class="col-xs-12">
-			    	<div class="col-md-12 well text-center">
-			        	 <h1> STEP «step.name»</h1>
-			        	 <form>
+		<form id="xconfigurator-form">
+			«FOR step:steps»
+				<div class="row setup-content" id="step-«stepIndex»">
+					<div class="col-xs-12">
+				    	<div class="col-md-12 well text-center">
+				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
 				            	 <button id="activate-step-«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
 				            	 «generateButtonScript(stepIndex+1)»
 			            	 «ENDIF»
-		            	 </form>
-			        </div>
-			    </div>
-			</div>
-			«stepIndex++»
-		«ENDFOR»
+				        </div>
+				    </div>
+				</div>
+				«stepIndex++»
+			«ENDFOR»
+		</form>
 		'''
 	}
 	
@@ -140,10 +141,8 @@ class XconfiguratorGenerator implements IGenerator {
 					«reference.component.label»
 				</label>
 				<select class="form-control" id="component-«reference.component.name»">
-					«FOR valueList : reference.component.values»
-						«FOR value : valueList.values»
-							<option>«value.value»</option>
-						«ENDFOR»
+					«FOR value : reference.component.values.values»
+						<option>«value.value»</option>
 					«ENDFOR»
 				</select>
 				«IF reference.component.description != null»
@@ -197,13 +196,72 @@ class XconfiguratorGenerator implements IGenerator {
 		return '''
 			<script type="text/javascript">
 				$(document).ready(function() {
-					var «component.name» = $('#component-«component.name»');
-					console.debug(«component.name»);
+					/* Create Component-Object */
+					var component_«component.name»_visible = «parseComponentVisible(component)»;
+					var component_«component.name» = new $.XComponent('#component-«component.name»');
+					
+					// Event-Handler for form-onChange */
+					$('#xconfigurator-form').change(function() {
+						console.debug('form changed');
+						component_«component.name».changeVisibility();
+					});
 				});
 			</script>
 		'''
 	}
 	
+	def parseComponentVisible(Component component) {
+		return '''
+			«IF component.visibility.condition instanceof Boolean»
+				«parseComponentVisibleBoolean(component.visibility.condition as Boolean)»
+			«ELSEIF component.visibility.condition instanceof AbstractIfCondition»
+				true
+			«ELSE»
+				false
+			«ENDIF»
+		'''
+	}
+	
+	def parseComponentVisibleBoolean(Boolean visible) {
+		return visible.boolean;
+	}
+	
+	def jqueryComponentClass() {
+		return '''
+			<script type="text/javascript">
+				(function ($) {
+					/* Constructor */
+					$.XComponent = function(element, visibleCondition) {
+						this.element = (element instanceof $) ? element : $(element);
+						this.elementContainer = this.element.parent('.form-group');
+						this.visibleCondition = visibleCondition;
+						console.debug(this);
+					};
+					
+					/* Methods */
+					$.XComponent.prototype = {
+						changeVisibility: function() {
+							var visible = this.checkCondition();
+							
+							console.debug('changing visibility to "'+visible+'"');
+						},
+						checkCondition: function() {
+							if (typeof this.visibleCondition === 'boolean') {
+								return this.visibleCondition;
+							}
+							
+							/* Parse Condition */
+							console.debug('ToDo: Parse Condition');
+						}
+					};
+					
+					/* Options */
+					$.XComponent.defaultOptions = {
+					};
+				}(jQuery));
+			</script>
+		'''
+	}
 		 
 	def application(Xconfigurator xconf) {
 		return '''
@@ -230,6 +288,7 @@ class XconfiguratorGenerator implements IGenerator {
 			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 			    <!-- Include all compiled plugins (below), or include individual files as needed -->
 			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+			    «jqueryComponentClass()»
 			  </head>
 			  <body>
 			    <nav class="navbar navbar-default">
@@ -272,7 +331,8 @@ class XconfiguratorGenerator implements IGenerator {
 							</ul>
 						</div>
 					</div>
-			    </div>			  
+			    </div>
+			    			  
 			</body>
 		</html>
 		'''

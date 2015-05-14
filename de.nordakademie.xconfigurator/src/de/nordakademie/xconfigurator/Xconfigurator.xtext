@@ -49,8 +49,8 @@ Successor:
 /** TEST TEST */
 Component:
 	'component' label=STRING name=ID '{'
-		values+=ValueList
-		(visibility+=AbstractVisible)?
+		values=ValueList
+		(visibility=AbstractVisible)?
 		(description=Description)?
 		('selected:' '[' selected=ValueType ']')?
 	'}'
