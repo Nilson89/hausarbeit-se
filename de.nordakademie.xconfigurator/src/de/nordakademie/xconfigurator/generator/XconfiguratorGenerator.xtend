@@ -3,22 +3,20 @@
  */
 package de.nordakademie.xconfigurator.generator
 
-import de.nordakademie.xconfigurator.xconfigurator.AbstractVisible
-import de.nordakademie.xconfigurator.xconfigurator.Component
-import de.nordakademie.xconfigurator.xconfigurator.Step
-import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
 import de.nordakademie.xconfigurator.xconfigurator.AbstractIfCondition
 import de.nordakademie.xconfigurator.xconfigurator.Boolean
+import de.nordakademie.xconfigurator.xconfigurator.Component
+import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
 import de.nordakademie.xconfigurator.xconfigurator.Condition
-import de.nordakademie.xconfigurator.xconfigurator.ElseIf
 import de.nordakademie.xconfigurator.xconfigurator.IfStatement
+import de.nordakademie.xconfigurator.xconfigurator.Step
+import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
-import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
 
 /**
  * Generates code from your model files on save.
@@ -110,25 +108,24 @@ class XconfiguratorGenerator implements IGenerator {
 		return '''
 		<form id="xconfigurator-form">
 			«FOR step:steps»
-				<div class="row setup-content" id="step-«stepIndex»">
+				<div class="row setup-content" id="step-«stepIndex++»">
 					<div class="col-xs-12">
 				    	<div class="col-md-12 well text-center">
 				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="«saveButtonName»«stepIndex+1»" class="btn btn-primary btn-lg">Speichern</button>
-				            	 «generateButtonScript(stepIndex+1, saveButtonName)»
+				            	 <button id="«saveButtonName»«stepIndex»" class="btn btn-primary btn-lg">Speichern</button>
+				            	 «generateButtonScript(stepIndex, saveButtonName)»
 			            	 «ENDIF»
 			            	 <p align="left">
 			            	 «IF !step.predecessor.isEmpty»
-								 <button id="«backButtonName»«stepIndex-1»" class="btn btn-primary btn-lg">Zurueck</button>
-								 «generateButtonScript(stepIndex-1, backButtonName)»
+								 <button id="«backButtonName»«stepIndex-2»" class="btn btn-primary btn-lg">Zurueck</button>
+								 «generateButtonScript(stepIndex-2, backButtonName)»
 							 «ENDIF»
 							 </p>
 				        </div>
 				    </div>
 				</div>
-				«stepIndex++»
 			«ENDFOR»
 		</form>
 		'''
