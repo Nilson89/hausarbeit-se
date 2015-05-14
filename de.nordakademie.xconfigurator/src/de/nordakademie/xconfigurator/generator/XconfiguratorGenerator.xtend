@@ -104,7 +104,7 @@ class XconfiguratorGenerator implements IGenerator {
 	def showContent(ArrayList<Step> steps) {
 		var stepIndex=1
 		var backButtonName = "go-back-button"
-		var saveButtonName = "save-button"
+		var nextButtonName = "save-button"
 		return '''
 		<form id="xconfigurator-form">
 			«FOR step:steps»
@@ -115,8 +115,8 @@ class XconfiguratorGenerator implements IGenerator {
 	        	 			 «showComponents(step)»
 			            	 <p align="right">
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="«saveButtonName»«stepIndex»" class="btn btn-primary btn-lg">Weiter</button>
-				            	 «generateButtonScript(stepIndex, saveButtonName)»
+				            	 <button id="«nextButtonName»«stepIndex»" class="btn btn-primary btn-lg">Weiter</button>
+				            	 «generateButtonScript(stepIndex, nextButtonName)»
 			            	 «ENDIF»
 			            	 </p><p align="left">
 			            	 «IF !step.predecessor.isEmpty»
