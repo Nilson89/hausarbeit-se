@@ -241,7 +241,8 @@ class XconfiguratorGenerator implements IGenerator {
 				$(document).ready(function() {
 					/* Create Component-Object */
 					var component_«component.name»_visible = «parseComponentVisible(component)»;
-					var component_«component.name» = new $.XComponent('#component-«component.name»');
+					var component_«component.name» = new $.XComponent('#component-«component.name»', component_«component.name»_visible);
+					component_«component.name».changeVisibility();
 					
 					// Event-Handler for form-onChange */
 					$('#xconfigurator-form').change(function() {
@@ -258,7 +259,7 @@ class XconfiguratorGenerator implements IGenerator {
 			«IF component.visibility.condition instanceof Boolean»
 				«parseComponentVisibleBoolean(component.visibility.condition as Boolean)»
 			«ELSEIF component.visibility.condition instanceof AbstractIfCondition»
-				true
+				false
 			«ELSE»
 				false
 			«ENDIF»
@@ -279,6 +280,9 @@ class XconfiguratorGenerator implements IGenerator {
 						this.elementContainer = this.element.parent('.form-group');
 						this.visibleCondition = visibleCondition;
 						console.debug(this);
+						
+						/* Hide on Init */
+						this.elementContainer.hide();
 					};
 					
 					/* Methods */
@@ -286,7 +290,11 @@ class XconfiguratorGenerator implements IGenerator {
 						changeVisibility: function() {
 							var visible = this.checkCondition();
 							
-							console.debug('changing visibility to "'+visible+'"');
+							if (visible) {
+								this.elementContainer.show();
+							} else {
+								this.elementContainer.hide();
+							}
 						},
 						checkCondition: function() {
 							if (typeof this.visibleCondition === 'boolean') {
