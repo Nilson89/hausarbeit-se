@@ -11,6 +11,8 @@ import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import org.eclipse.emf.common.util.EList
 import javax.annotation.PreDestroy
+import de.nordakademie.xconfigurator.xconfigurator.Component
+import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
 
 /**
  * This class contains custom validation rules. 
@@ -97,9 +99,8 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		}
 	}
 
-		@Check
+	@Check
 	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
-
 		//Startpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
@@ -115,7 +116,29 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		}
 	}
 	
-		@Check
+	@Check
+	def checkFirstStepHasVisibleElement(Xconfigurator xconf) {
+		var int i
+		var boolean hasVisibleElement = false
+
+		for (Step step : xconf.steps) {
+			if (step.predecessor.isEmpty) {
+				for (i = 0; i < step.elements.length; i++) {
+					if (step.elements.get(i).component.visibility == true) {
+						hasVisibleElement = true
+					}
+				}
+			}
+		}
+		if (!hasVisibleElement) {
+			error(
+				'First Step needs at least one visible element!',
+				XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+			)
+		}
+	}
+	
+	@Check
 	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
 
 		//Endpoint

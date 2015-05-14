@@ -47,16 +47,16 @@ class XconfiguratorGenerator implements IGenerator {
 	 	//commits ordered ArrayList to displayHTML method
 	 	
 	 	var ArrayList<Step> steps
-	 	
 	 	var Step step = getFirstStep(xconfig.steps)
 	 	steps = new ArrayList<Step>
 	
 		while (step != null) {
-			steps.add(step)
+			if (stepHasVisibleElements(step)){
+				steps.add(step)
+			}
 			step = getSuccessor(xconfig.steps, step)
 		}
 		displaySteps(steps)
-	
 	}	
 				 
 	 // TODO: Wenn kein erster Step gefunden wurde -> throw exception	 
@@ -75,12 +75,28 @@ class XconfiguratorGenerator implements IGenerator {
 	 	for (Step step: steps){
 	 		if (step.predecessor.size > 0){
 	 			if (step.predecessor.get(0).step.identityEquals(predecessor)){
-	 				return step
+				return step
 	 			}
 	 		}
 	 	}
 	 	return null
  	}
+ 	
+ 	def boolean stepHasVisibleElements (Step step){
+		var boolean returnValue
+		
+		if (step.elements.length > 0){
+			var int i
+			for (i = 0;i < step.elements.length; i++){
+				if (isVisible(step.elements.get(i).component)){
+					returnValue = true
+				}
+			}	
+		}else{
+			returnValue = false
+		}
+		return returnValue
+	}
  	
  	def boolean isVisible(Component component) {
 		return parseCondition.parse(component.visibility.condition);
