@@ -117,9 +117,16 @@ class XconfiguratorGenerator implements IGenerator {
 				            	 «generateButtonScript(stepIndex+1)»
 			            	 «ENDIF»
 		            	 </form>
+		            	 <div>
+							«IF !step.predecessor.isEmpty»
+							<button id="go-back-step-«stepIndex-1»»" class="btn btn-primary btn-lg">Zurueck</button>
+							«generateBackButtonScript(stepIndex-1)»
+							«ENDIF»
+					</div>
 			        </div>
 			    </div>
 			</div>
+
 			«stepIndex++»
 		«ENDFOR»
 		'''
@@ -193,6 +200,44 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+		def generateBackButtonScript(int i) {
+		return '''			    
+		    <!-- Custom JS-Logic -->
+		    <script type="text/javascript">
+		        $(document).ready(function() {
+	      			var navListItems = $('ul.setup-panel li a'),
+		          	allWells = $('.setup-content');
+				
+				    allWells.hide();
+				
+				    navListItems.click(function(e)
+				    {
+				        e.preventDefault();
+				        var $target = $($(this).attr('href')),
+				            $item = $(this).closest('li');
+				        
+				        if (!$item.hasClass('disabled')) {
+				            navListItems.closest('li').removeClass('active');
+				            $item.addClass('active');
+				            allWells.hide();
+				            $target.show();
+				        }
+				    });
+				    
+				    $('ul.setup-panel li.active a').trigger('click');
+				    
+				    // DEMO ONLY //
+				    $('#go-back-step-«i»').on('click', function(e) {
+				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
+				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
+				        $(this).remove();
+				    })    
+				});
+		  	</script>
+		'''
+	}
+	
+
 	def generateComponentScript(Component component) {
 		return '''
 			<script type="text/javascript">
@@ -203,7 +248,6 @@ class XconfiguratorGenerator implements IGenerator {
 			</script>
 		'''
 	}
-	
 		 
 	def application(Xconfigurator xconf) {
 		return '''
@@ -278,22 +322,5 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 
-	
-	def toHtml(Step s) '''
-		<xhtml>
-			<head>
-				<title>Konfigurator</title>
-			</head>
-			<body>
-				<h3>Auswahl:</h3>
-				
-					<ul>
-						<li>Option 1</li>
-						<li>Option 2</li>
-					</ul>
-				<h3>weiter</h3>		
-				<h3>zurueck</h3>
-			</body>
-		</xhtml>
-	'''
+
 }
