@@ -51,9 +51,9 @@ class XconfiguratorGenerator implements IGenerator {
 	 	steps = new ArrayList<Step>
 	
 		while (step != null) {
-			if (stepHasVisibleElements(step)){
-				steps.add(step)
-			}
+			//if (stepHasVisibleElements(step)){
+			steps.add(step)
+			//}
 			step = getSuccessor(xconfig.steps, step)
 		}
 		displaySteps(steps)
@@ -225,7 +225,6 @@ class XconfiguratorGenerator implements IGenerator {
 					
 					// Event-Handler for form-onChange */
 					$('#xconfigurator-form').change(function() {
-						console.debug('form changed');
 						component_«component.name».changeVisibility();
 					});
 				});
@@ -291,7 +290,6 @@ class XconfiguratorGenerator implements IGenerator {
 						this.element = (element instanceof $) ? element : $(element);
 						this.elementContainer = this.element.parent('.form-group');
 						this.visibleCondition = visibleCondition;
-						console.debug(this);
 						
 						/* Hide on Init */
 						this.elementContainer.hide();
