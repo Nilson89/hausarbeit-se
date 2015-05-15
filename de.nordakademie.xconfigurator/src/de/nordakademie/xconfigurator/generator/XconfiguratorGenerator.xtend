@@ -258,9 +258,11 @@ class XconfiguratorGenerator implements IGenerator {
 					return «parseComponentVisible(visible.^if.stmt.^return)»;
 				}
 				«IF visible.getElseif.size > 0»
-				else if () {
-					return «parseComponentVisible(visible.^else.^return)»;
-				}
+					«FOR statement : visible.elseif»
+						else if («parseComponentVisibleIfStatement(statement.stmt)») {
+							return «parseComponentVisible(statement.stmt.^return)»;
+						}
+					«ENDFOR»
 				«ENDIF»
 				else {
 					return «parseComponentVisible(visible.^else.^return)»;
