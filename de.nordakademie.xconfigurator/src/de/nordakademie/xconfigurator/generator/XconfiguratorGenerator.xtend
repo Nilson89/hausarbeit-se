@@ -83,19 +83,17 @@ class XconfiguratorGenerator implements IGenerator {
  	}
  	
  	def boolean stepHasVisibleElements (Step step){
-		var boolean returnValue
+		//var boolean returnValue
 		
 		if (step.elements.length > 0){
 			var int i
 			for (i = 0;i < step.elements.length; i++){
 				if (isVisible(step.elements.get(i).component)){
-					returnValue = true
+					return true
 				}
 			}	
-		}else{
-			returnValue = false
 		}
-		return returnValue
+		return false
 	}
  	
  	def boolean isVisible(Component component) {

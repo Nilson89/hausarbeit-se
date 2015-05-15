@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.EList
 import javax.annotation.PreDestroy
 import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
+import de.nordakademie.xconfigurator.generator.ParseCondition
 
 /**
  * This class contains custom validation rules. 
@@ -20,6 +21,8 @@ import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class XconfiguratorValidator extends AbstractXconfiguratorValidator {
+
+	var ParseCondition parseCondition = new ParseCondition()
 
 	@Check
 	def checkMaxOneSuccessor(Step step) {
@@ -119,12 +122,14 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkFirstStepHasVisibleElement(Xconfigurator xconf) {
 		var int i
-		var boolean hasVisibleElement = true
+		var boolean hasVisibleElement = false
 
 		for (Step step : xconf.steps) {
 			if (step.predecessor.isEmpty) {
 				for (i = 0; i < step.elements.length; i++) {
-					if (step.elements.get(i).component.visibility == true) {
+					var Component component
+					component = step.elements.get(i).component
+					if (parseCondition.parse(component.visibility.condition)) {
 						hasVisibleElement = true
 					}
 				}

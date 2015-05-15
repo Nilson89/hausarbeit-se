@@ -72,7 +72,7 @@ component "Hersteller" manufacturer_PKW_only{
 values: ["BMW" "Audi"]
 visible: [If (types = "PKW") {true} Else {false}]
 description: "PKW-Hersteller"
-selected: ["BMW"]
+selected: ["Audi"]
 }
 
 component "Hersteller" manufacturer_LKW_only{
