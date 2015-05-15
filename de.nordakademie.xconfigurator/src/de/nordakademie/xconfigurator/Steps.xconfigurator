@@ -1,7 +1,6 @@
 /** 
  * Start
  */
-
 step Start {
 	successor <Product>
 	component <vehicle_type>
@@ -17,6 +16,7 @@ component "Fahrzeugtyp" vehicle_type{
  */
 step Product {
 	predecessor<Start>
+	successor<Ausstattung>
 	component<vehicle_brand_car>
 	component<vehicle_brand_car_model_audi>
 	component<vehicle_brand_car_model_vw>
@@ -24,7 +24,6 @@ step Product {
 	component<vehicle_brand_motorbike_model_honda>
 	component<vehicle_brand_motorbike_model_kawasaki>
 }
-
 
 /* Auto */
 component "Marke" vehicle_brand_car {
@@ -51,4 +50,15 @@ component "Modell" vehicle_brand_motorbike_model_kawasaki {
 component "Modell" vehicle_brand_motorbike_model_honda {
 	values: ['Hornet' 'CBF600' 'Fireblade']
 	visible: [If(vehicle_brand_motorbike = 'Honda'){true}Else {false}]
+}
+
+/* Ausstattung */
+step Ausstattung {
+	predecessor<Product>
+	component<vehicle_brand_car_model_a1>
+}
+
+component "Motor" vehicle_brand_car_model_a1 {
+	values: ['60PS' '75PS' '120PS']
+	visible: [If(vehicle_brand_car_model_audi = "A1"){true}Else {false}]
 }

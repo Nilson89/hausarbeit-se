@@ -119,7 +119,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkFirstStepHasVisibleElement(Xconfigurator xconf) {
 		var int i
-		var boolean hasVisibleElement = false
+		var boolean hasVisibleElement = true
 
 		for (Step step : xconf.steps) {
 			if (step.predecessor.isEmpty) {
