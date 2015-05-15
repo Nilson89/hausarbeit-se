@@ -34,7 +34,12 @@ class XconfiguratorGenerator implements IGenerator {
 			fsa.generateFile(
 				'index.html',
 				application(xconf)
-			)
+			);
+			
+			fsa.generateFile(
+				'configurationlist.html',
+				myConfigurations()
+			);
 		}
 	}
 
@@ -265,8 +270,20 @@ class XconfiguratorGenerator implements IGenerator {
 	}
 	
 	def parseComponentVisibleIfStatement(IfStatement visible) {
+		var conditionIndex = 1;
+		
 		return '''
 			«parseComponentVisibleCondition(visible.conditions.get(0))»
+			«IF visible.type.size > 0»
+				«FOR t : visible.type»
+					«IF t.equals("And")»
+						&& «parseComponentVisibleCondition(visible.conditions.get(conditionIndex))»
+					«ELSEIF t.equals("Or")»
+						|| «parseComponentVisibleCondition(visible.conditions.get(conditionIndex))»
+					«ENDIF»
+					«{ conditionIndex++; "" }»
+				«ENDFOR»
+			«ENDIF»
 		'''
 	}
 	
@@ -363,13 +380,16 @@ class XconfiguratorGenerator implements IGenerator {
 			         <span class="icon-bar"></span>
 			         <span class="icon-bar"></span>
 			       </button>
-			       <a class="navbar-brand" href="#">XConfigurator</a>
+			       <a class="navbar-brand" href="index.html">XConfigurator</a>
 			     </div>
 			     
 			     <div class="collapse navbar-collapse" id="xconfigurator-navbar">
 			     		  <ul class="nav navbar-nav">
 			     		    <li>
-			     		      <a href="#">Home</a>
+			     		      <a href="index.html">Home</a>
+			     		    </li>
+			     		    <li>
+			     		      <a href="#">Meine Konfigurationen</a>
 			     		    </li>
 			     		  </ul>
 			     		</div>
@@ -388,14 +408,75 @@ class XconfiguratorGenerator implements IGenerator {
 			    	<div class="row form-group">
 			    	    <div class="col-xs-12">
 			    	        <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-«««			    	        «FOR step: xconf.steps»
 								«generateStepHierarchy(xconf)»
-«««			    	        «ENDFOR»
 							</ul>
 						</div>
 					</div>
 			    </div>
 			    			  
+			</body>
+		</html>
+		'''
+	}
+	
+	def myConfigurations() {
+		return '''
+			<!DOCTYPE html>
+			<html lang="en">
+			  <head>
+			    <meta charset="utf-8">
+			    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+			    <meta name="viewport" content="width=device-width, initial-scale=1">
+			    <title>XConfigurator</title>
+			
+			    <!-- Bootstrap -->
+			    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+			    
+			
+			    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+			    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+			    <!--[if lt IE 9]>
+			      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+			      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+			    <![endif]-->
+			    
+			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+			    <!-- Include all compiled plugins (below), or include individual files as needed -->
+			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+			    «jqueryComponentClass()»
+			  </head>
+			  <body>
+			    <nav class="navbar navbar-default">
+			      <div class="container">
+			        <div class="navbar-header">
+			       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#xconfigurator-navbar">
+			         <span class="sr-only">Toggle navigation</span>
+			         <span class="icon-bar"></span>
+			         <span class="icon-bar"></span>
+			         <span class="icon-bar"></span>
+			       </button>
+			       <a class="navbar-brand" href="index.html">XConfigurator</a>
+			     </div>
+			     
+			     <div class="collapse navbar-collapse" id="xconfigurator-navbar">
+			     		  <ul class="nav navbar-nav">
+			     		    <li>
+			     		      <a href="index.html">Home</a>
+			     		    </li>
+			     		    <li>
+			     		      <a href="#">Meine Konfigurationen</a>
+			     		    </li>
+			     		  </ul>
+			     		</div>
+			      </div>
+			    </nav>
+			    
+			    <div class="container">
+			    	<h1>Meine Konfigurationen</h1>
+			    	
+			    	<p>#ToDo</p>
+			    </div>
 			</body>
 		</html>
 		'''
