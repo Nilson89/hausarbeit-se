@@ -2,11 +2,18 @@ grammar de.nordakademie.xconfigurator.Xconfigurator with org.eclipse.xtext.commo
 
 generate xconfigurator "http://www.nordakademie.de/xconfigurator/Xconfigurator"
 
+/**
+ * @author Julian Kondoch
+ * @author Niklas Rothe
+ * @author Pascal Laub
+ * @author Niels Maseberg
+ */
+
 /* Der Xconfigurator besteht aus 0..1 Type-Elementen */
 Xconfigurator:
 	(steps+=Step | component+=Component)*;
 
-	/**
+/**
  * Der Aufbau eines Step-Elements
  * 
  * Beispiel:

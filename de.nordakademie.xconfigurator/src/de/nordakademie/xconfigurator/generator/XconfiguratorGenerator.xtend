@@ -132,17 +132,17 @@ class XconfiguratorGenerator implements IGenerator {
 				    	<div class="col-md-12 well text-center">
 				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
-			            	 <p align="right">
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="«nextButtonName»«stepIndex»" class="btn btn-primary btn-lg">Weiter</button>
+				            	 <button id="«nextButtonName»«stepIndex»" class="btn btn-primary pull-right">Weiter</button>
 				            	 «generateButtonScript(stepIndex, nextButtonName)»
+				             «ELSE»
+				             	<button id="save-configuration" type="submit" class="btn btn-primary pull-right">Speichern</button>	 
 			            	 «ENDIF»
-			            	 </p><p align="left">
 			            	 «IF !step.predecessor.isEmpty»
-								 <button id="«backButtonName»«stepIndex-2»" class="btn btn-primary btn-lg">Zurueck</button>
+								 <button id="«backButtonName»«stepIndex-2»" class="btn btn-default pull-left">Zurueck</button>
 								 «generateButtonScript(stepIndex-2, backButtonName)»
 							 «ENDIF»
-							 </p>
+							 <div class="clearfix"></div>
 				        </div>
 				    </div>
 				</div>
@@ -179,8 +179,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
-	
-	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def generateButtonScript(int i, String buttonName) {
 		return '''			    
 		    <!-- Custom JS-Logic -->
@@ -217,6 +218,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 
+	/**
+	 * @author Niels Maseberg
+	 */
 	def generateComponentScript(Component component) {
 		return '''
 			<script type="text/javascript">
@@ -235,6 +239,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def parseComponentVisible(AbstractCondition visible) {
 		return '''
 			«IF visible instanceof Boolean»
@@ -247,10 +254,16 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def parseComponentVisibleBoolean(Boolean visible) {
 		return visible.boolean;
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def parseComponentVisibleAbstractIf(AbstractIfCondition visible) {
 		return '''
 			function() {
@@ -271,6 +284,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def parseComponentVisibleIfStatement(IfStatement visible) {
 		var conditionIndex = 1;
 		
@@ -289,6 +305,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def parseComponentVisibleCondition(Condition condition) {
 		return '''
 			(
@@ -298,6 +317,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def jqueryComponentClass() {
 		return '''
 			<script type="text/javascript">
@@ -344,7 +366,27 @@ class XconfiguratorGenerator implements IGenerator {
 			</script>
 		'''
 	}
-		 
+	
+	/**
+	 * @author Niels Maseberg
+	 */
+	def onSaveHandler() {
+		return '''
+			<script type="text/javascript">
+				$(document).ready(function() {
+					$('#xconfigurator-form').on('submit', function(e) {
+						e.preventDefault();
+						
+						console.debug('Save triggered');
+					});
+				});
+			</script>
+		'''
+	}
+	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def application(Xconfigurator xconf) {
 		return '''
 			<!DOCTYPE html>
@@ -371,6 +413,7 @@ class XconfiguratorGenerator implements IGenerator {
 			    <!-- Include all compiled plugins (below), or include individual files as needed -->
 			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 			    «jqueryComponentClass()»
+			    «onSaveHandler()»
 			  </head>
 			  <body>
 			    <nav class="navbar navbar-default">
@@ -391,7 +434,7 @@ class XconfiguratorGenerator implements IGenerator {
 			     		      <a href="index.html">Home</a>
 			     		    </li>
 			     		    <li>
-			     		      <a href="#">Meine Konfigurationen</a>
+			     		      <a href="configurationlist.html">Meine Konfigurationen</a>
 			     		    </li>
 			     		  </ul>
 			     		</div>
@@ -421,6 +464,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Niels Maseberg
+	 */
 	def myConfigurations() {
 		return '''
 			<!DOCTYPE html>
@@ -446,7 +492,6 @@ class XconfiguratorGenerator implements IGenerator {
 			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 			    <!-- Include all compiled plugins (below), or include individual files as needed -->
 			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-			    «jqueryComponentClass()»
 			  </head>
 			  <body>
 			    <nav class="navbar navbar-default">
@@ -467,7 +512,7 @@ class XconfiguratorGenerator implements IGenerator {
 			     		      <a href="index.html">Home</a>
 			     		    </li>
 			     		    <li>
-			     		      <a href="#">Meine Konfigurationen</a>
+			     		      <a href="configurationlist.html">Meine Konfigurationen</a>
 			     		    </li>
 			     		  </ul>
 			     		</div>
@@ -483,6 +528,5 @@ class XconfiguratorGenerator implements IGenerator {
 		</html>
 		'''
 	}
-
 
 }
