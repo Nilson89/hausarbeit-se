@@ -475,6 +475,8 @@ class XconfiguratorGenerator implements IGenerator {
 								</tbody>
 							</table>
 						</div>
+						
+						<button class="btn btn-primary" onClick="window.print()">Drucken</button>
 					</div>
 			    </div>
 			    			  
