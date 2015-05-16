@@ -76,10 +76,17 @@ class XconfiguratorGenerator implements IGenerator {
 		return '''
 		<form id="xconfigurator-form">
 			«FOR step:steps»
+				
 				<div class="row setup-content" id="step-«stepIndex++»">
 					<div class="col-xs-12">
 				    	<div class="col-md-12 well text-center">
-				        	 <h1> STEP «step.name»</h1>
+				        	 <h1> STEP 
+				        		«IF step.label != null»
+									«step.label»
+								«ELSE»
+									«step.name»
+								«ENDIF»
+							</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
 				            	 <button id="«nextButtonName»«stepIndex»" class="btn btn-primary pull-right">Weiter</button>
@@ -164,9 +171,9 @@ class XconfiguratorGenerator implements IGenerator {
 				    $('ul.setup-panel li.active a').trigger('click');
 				    
 				    $('#«buttonName»«i»').on('click', function(e) {
-				        //$('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
+				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
 				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
-				        $(this).hide();
+				        $(this).remove();
 				        
 				    })    
 				});
