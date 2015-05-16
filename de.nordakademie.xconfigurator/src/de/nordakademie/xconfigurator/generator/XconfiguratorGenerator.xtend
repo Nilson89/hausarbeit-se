@@ -43,16 +43,10 @@ class XconfiguratorGenerator implements IGenerator {
 	 var StepHierarchy stepHierarchy = new StepHierarchy()
 	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
-	 
-	 	var ArrayList<Step> steps
-	 	var Step step = stepHierarchy.getFirstStep(xconfig.steps)
-	 	steps = new ArrayList<Step>
-	
-		while (step != null) {
-			steps.add(step)
-			step = stepHierarchy.getSuccessor(xconfig.steps, step)
-		}
-		displaySteps(steps)
+	 	var ArrayList<Step> orderedSteps
+	 	orderedSteps = stepHierarchy.getOrderedStepList(xconfig)
+	 	
+		displaySteps(orderedSteps)
 	}	
 
 	/**
