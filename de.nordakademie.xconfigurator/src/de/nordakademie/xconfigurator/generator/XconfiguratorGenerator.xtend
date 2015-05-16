@@ -88,14 +88,12 @@ class XconfiguratorGenerator implements IGenerator {
 				        	 <h1> STEP «step.name»</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
-				            	 <button id="«nextButtonName»«stepIndex»" class="btn btn-primary pull-right">Weiter</button>
-				            	 «generateButtonScript(stepIndex, nextButtonName)»
+				            	 <button id="«nextButtonName»«stepIndex»" data-target="#step-«stepIndex»" class="btn btn-primary pull-right btn-next">Weiter</button>
 				             «ELSE»
 				             	<button id="save-configuration" type="submit" class="btn btn-primary pull-right">Speichern</button>	 
 			            	 «ENDIF»
 			            	 «IF !step.predecessor.isEmpty»
-								 <button id="«backButtonName»«stepIndex-2»" class="btn btn-default pull-left">Zurueck</button>
-								 «generateButtonScript(stepIndex-2, backButtonName)»
+								 <button id="«backButtonName»«stepIndex-2»" data-target="#step-«stepIndex-2»" class="btn btn-default pull-left btn-previous">Zurueck</button>
 							 «ENDIF»
 							 <div class="clearfix"></div>
 				        </div>
@@ -143,7 +141,7 @@ class XconfiguratorGenerator implements IGenerator {
 	/**
 	 * @author Niels Maseberg, Pascal Laub, Niklas Rothe
 	 */
-	def generateButtonScript(int i, String buttonName) {
+	def generateButtonScript() {
 		return '''			    
 		    <!-- Custom JS-Logic -->
 		    <script type="text/javascript">
@@ -153,6 +151,7 @@ class XconfiguratorGenerator implements IGenerator {
 				
 				    allWells.hide();
 				
+					/* Click Handler for Tabs */
 				    navListItems.click(function(e)
 				    {
 				        e.preventDefault();
@@ -167,14 +166,29 @@ class XconfiguratorGenerator implements IGenerator {
 				        }
 				    });
 				    
+				    /* Activate first Tab onLoad */
 				    $('ul.setup-panel li.active a').trigger('click');
 				    
-				    $('#«buttonName»«i»').on('click', function(e) {
-				        //$('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
-				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
-				        $(this).hide();
-				        
-				    })    
+				    /* Click-Handler for next-Button */
+				    $('.setup-content .btn-next').on('click', function(e) {
+				    	e.preventDefault();
+				    	
+				    	var target = $(this).data('target');
+				    	var link = $('ul.setup-panel li a[href="'+target+'"]');
+				    	if ($(link).parent().hasClass('disabled')) {
+			    			$(link).parent().removeClass('disabled');
+			    		}
+				    	$(link).trigger('click');
+				    });
+				    
+				    /* Click-Handler for previous-Button */
+				    $('.setup-content .btn-previous').on('click', function(e) {
+				    	e.preventDefault();
+				    	
+				    	var target = $(this).data('target');
+				    	var link = $('ul.setup-panel li a[href="'+target+'"]');
+				    	$(link).trigger('click');
+				    });
 				});
 		  	</script>
 		'''
@@ -362,8 +376,6 @@ class XconfiguratorGenerator implements IGenerator {
 						$(values).each(function(index, element) {
 							$(tbody).append('<tr><td>'+element.name+'</td><td>'+element.value+'</td></tr>');
 						});
-						
-						console.debug('Save triggered');
 					});
 				});
 			</script>
@@ -400,6 +412,7 @@ class XconfiguratorGenerator implements IGenerator {
 			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 			    «jqueryComponentClass()»
 			    «onSaveHandler()»
+			    «generateButtonScript()»
 			  </head>
 			  <body>
 			    <nav class="navbar navbar-default">
