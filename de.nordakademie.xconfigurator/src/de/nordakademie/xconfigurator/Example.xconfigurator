@@ -1,7 +1,6 @@
 /** 
  * Start
  */
-
 step Start {
 	successor <Product>
 	component <vehicle_type>
@@ -17,8 +16,13 @@ component "Fahrzeugtyp" vehicle_type{
  */
 step Product {
 	predecessor<Start>
+	successor<Ausstattung>
 	component<vehicle_brand_car>
+	component<vehicle_brand_car_model_audi>
+	component<vehicle_brand_car_model_vw>
 	component<vehicle_brand_motorbike>
+	component<vehicle_brand_motorbike_model_honda>
+	component<vehicle_brand_motorbike_model_kawasaki>
 }
 
 /* Auto */
@@ -45,5 +49,108 @@ component "Modell" vehicle_brand_motorbike_model_kawasaki {
 }
 component "Modell" vehicle_brand_motorbike_model_honda {
 	values: ['Hornet' 'CBF600' 'Fireblade']
-	visible: [If(vehicle_brand_motorbike = 'Kawasaki'){true}Else {false}]
+	visible: [If(vehicle_brand_motorbike = 'Honda'){true}Else {false}]
 }
+
+
+/* Ausstattung */
+step Ausstattung {
+	predecessor<Product>
+	component<vehicle_brand_car_motor_a1>
+	component<vehicle_brand_car_motor_a2>
+	component<vehicle_brand_car_motor_a3>
+	component<vehicle_brand_car_motor_polo>
+	component<vehicle_brand_car_motor_golf>
+	component<vehicle_brand_car_motor_passat>
+	component<vehicle_brand_motorbike_motor_hornet>
+	component<vehicle_brand_motorbike_motor_cbf600>
+	component<vehicle_brand_motorbike_motor_fireblade>
+	component<vehicle_brand_motorbike_motor_er6n>
+	component<vehicle_brand_motorbike_motor_z800>
+	component<vehicle_brand_motorbike_motor_z1000>
+	component<vehicle_brand_car_doors>
+	component<vehicle_colour>
+	component<vehicle_colour_kawasaki>
+}
+
+/* Motoren */
+
+component "Motor" vehicle_brand_car_motor_a1 {
+	values: ['60PS' '75PS' '120PS']
+	visible: [If(vehicle_brand_car_model_audi = 'A1'){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_car_motor_a2 {
+	values: ['66PS' '99PS' '111PS']
+	visible: [If(vehicle_brand_car = 'Audi') And (vehicle_brand_car_model_audi = 'A2'){true}Else {false}]
+}
+ 
+component "Motor" vehicle_brand_car_motor_a3 {
+	values: ['100PS' '150PS' '230PS']
+	visible: [If(vehicle_type = 'Auto') And (vehicle_brand_car = 'Audi') And (vehicle_brand_car_model_audi = 'A3'){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_car_motor_polo {
+	values: ['50PS' '80PS' '130PS']
+	visible: [If(vehicle_brand_car_model_vw = 'Polo'){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_car_motor_golf {
+	values: ['75PS' '150PS' '300PS']
+	visible: [If(vehicle_brand_car = 'Volkswagen') {If (vehicle_brand_car_model_vw = 'Golf'){true} Else {false}}Else {false}]
+}
+
+component "Motor" vehicle_brand_car_motor_passat {
+	values: ['120PS' '200PS' '300PS']
+	visible: [If(vehicle_type = 'Auto'){If (vehicle_brand_car = 'Volkswagen'){If (vehicle_brand_car_model_vw = 'Passat'){true} Else {false}} Else {false}} Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_hornet {
+	values: ['32PS' '106PS']
+	visible: [If(vehicle_brand_motorbike_model_honda = 'Hornet') And (vehicle_brand_motorbike = 'Honda') {true}Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_cbf600 {
+	values: ['34PS' '178PS']
+	visible: [If(vehicle_brand_motorbike_model_honda = 'CBF600') And (vehicle_brand_motorbike = 'Honda'){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_fireblade {
+	values: ['34PS' '198PS']
+	visible: [If(vehicle_brand_motorbike_model_honda = 'Fireblade') And (vehicle_brand_motorbike = 'Honda'){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_er6n {
+	values: ['30PS' '110PS']
+	visible: [If(vehicle_type = 'Motorrad') And (vehicle_brand_motorbike_model_kawasaki = 'ER6n') {true}Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_z800 {
+	values: ['33PS' '150PS']
+	visible: [If(vehicle_type = 'Auto') {false} ElseIf (vehicle_brand_motorbike_model_kawasaki = 'Z800')Or(vehicle_brand_motorbike_model_kawasaki = "Z800e"){true}Else {false}]
+}
+
+component "Motor" vehicle_brand_motorbike_motor_z1000 {
+	values: ['68PS' '200PS']
+	visible: [If(vehicle_brand_motorbike_model_kawasaki = 'Z1000') And (vehicle_brand_motorbike = 'Kawasaki'){true}Else {false}]
+}
+
+/* Türen */
+
+component "Tueren" vehicle_brand_car_doors {
+	values: ['3 Tueren' '5 Tueren']
+	visible: [If(vehicle_type = 'Motorrad'){false}Else {true}]
+}
+
+/* Farbe */
+
+component "Farbe" vehicle_colour {
+	values: ['Blau' 'Rot' 'Schwarz'"Silber""Weiss"]
+	visible: [If(vehicle_brand_motorbike_model_kawasaki = 'ER6n'){false}ElseIf(vehicle_brand_motorbike_model_kawasaki = "Z1000"){false}Else {true}]
+}
+
+component "Farbe" vehicle_colour_kawasaki {
+	values: ['Gruen']
+	visible: [If(vehicle_brand_motorbike_model_kawasaki = "ER6n")Or(vehicle_brand_motorbike_model_kawasaki = "Z1000"){true}Else {false}]
+}
+
