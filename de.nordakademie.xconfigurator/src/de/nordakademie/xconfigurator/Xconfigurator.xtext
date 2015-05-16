@@ -43,7 +43,7 @@ Predecessor:
 Successor:
 	'successor' '<' step=[Step|ID] '>';
 
-	/**
+/**
  * Komponente
  * 
  * Beispiel:
@@ -52,8 +52,6 @@ Successor:
  *     values: ['Audi', 'BMW', 'VW']
  * }
  */
-
-/** TEST TEST */
 Component:
 	'component' label=STRING name=ID '{'
 		values=ValueList
@@ -100,7 +98,7 @@ Else:
 Boolean:
 	{Boolean} (boolean ?= 'true' | 'false');
 
-	/**
+/**
  * Liste von Werten
  * 
  * Beispiel:
@@ -113,7 +111,7 @@ Description:
 ValueList:
 	{ValueList} 'values: [' values+=ValueType* ']';
 
-	/**
+/**
  * Einfacher Wert
  * 
  * Beispiel:
@@ -124,94 +122,3 @@ ValueList:
  */
 ValueType:
 	value=STRING;
-
-	// ########## OLD FROM HERE ###############
-
-
-/*
-AbstractElement:
-	TextElement | RadioElement | CheckboxElement | SelectElement
-	label = Label
-;
-
-SelectElement:
-	'selectElement' name = ID
-	values += Value+
-;
-
-CheckboxElement:
-	'checkboxElement' name = ID
-	values += Value+
-;
-
-RadioElement:
-	'radioElement' name = ID
-	values += Value+
-;
-
-TextElement:
-	'textElement' name = ID
-;
-
-Label:
-	'label' name = ID
-;
-
-Value:
-	'value' name = ID
-;
-*/
-
-//Collection:
-//	(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck | manufacturers+=Manufacturer)*;
-
-//Collection:
-//	(manufacturers+=Manufacturer | meansoftransportations+=MeansOfTransportation)*;
-
-//Motorbike:
-//	'motorbike' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-//	//(motor+=Motor* | wheels+=Wheels)
-//	motor+=Motor*
-//	wheels+=Wheels
-//;
-
-//Automobile:
-//	'automobile' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-//	//(motor+=Motor* | doors+=Doors | wheels+=Wheels)
-//	motor+=Motor*
-//	doors+=Doors*
-//	wheels+=Wheels
-//;
-
-//Truck:
-//	'truck' name=STRING '(' manufacturer=[Manufacturer|ID] ')' ':'
-//	motor+=Motor*
-//	doors+=Doors
-//	wheels+=Wheels
-//;
-
-//MeansOfTransportation:
-//	Motorbike | Automobile | Truck
-//;
-
-//Manufacturer:
-//	'manufacturer' description=STRING name=ID
-//':'
-//'-'(motorbikes+=Motorbike | automobiles+=Automobile | trucks+=Truck)*
-//;
-
-//Motor:
-//	'motor' ps=INT ccm=INT type=Motortype
-//	;
-
-//enum Motortype:
-//	petrol | electro | diesel
-//;
-
-//Doors:
-//	'doors' amount=INT
-//;
-
-//Wheels:
-//	'wheels' amount=INT
-//;
