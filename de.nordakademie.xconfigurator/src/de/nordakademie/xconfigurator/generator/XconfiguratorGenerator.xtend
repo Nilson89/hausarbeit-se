@@ -38,52 +38,22 @@ class XconfiguratorGenerator implements IGenerator {
 
 	/**
 	 * Create Application
-	 * generates the step hierarchy
-	 * commits ordered ArrayList to displayHTML method
-	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
 	 */
 	 
+	 var StepHierarchy stepHierarchy = new StepHierarchy()
+	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
-	 	
-	 	
+	 
 	 	var ArrayList<Step> steps
-	 	var Step step = getFirstStep(xconfig.steps)
+	 	var Step step = stepHierarchy.getFirstStep(xconfig.steps)
 	 	steps = new ArrayList<Step>
 	
 		while (step != null) {
 			steps.add(step)
-			step = getSuccessor(xconfig.steps, step)
+			step = stepHierarchy.getSuccessor(xconfig.steps, step)
 		}
 		displaySteps(steps)
 	}	
-	
-	/**
-	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
-	 */ 
-	 def Step getFirstStep(EList<Step> steps){
-	 	if (steps.length > 0){
-	 		for(Step step: steps){
-	 			if (step.predecessor.isEmpty){
-	 				return step
-	 			}
-	 		}
-	 		return null
-	 	}
-	 }
-	 
-	 /**
-	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
-	 */
-	 def Step getSuccessor(EList<Step> steps,Step predecessor){
-	 	for (Step step: steps){
-	 		if (step.predecessor.size > 0){
-	 			if (step.predecessor.get(0).step.identityEquals(predecessor)){
-				return step
-	 			}
-	 		}
-	 	}
-	 	return null
- 	}
 
 	/**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
@@ -200,9 +170,10 @@ class XconfiguratorGenerator implements IGenerator {
 				    $('ul.setup-panel li.active a').trigger('click');
 				    
 				    $('#«buttonName»«i»').on('click', function(e) {
-				        $('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
+				        //$('ul.setup-panel li:eq(«i-1»)').removeClass('disabled');
 				        $('ul.setup-panel li a[href="#step-«i»"]').trigger('click');
-				        $(this).remove();
+				        $(this).hide();
+				        
 				    })    
 				});
 		  	</script>

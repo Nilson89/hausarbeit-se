@@ -231,4 +231,13 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
+	
+	@Check
+	def checkComponentContainedInFollowedSteps(Xconfigurator xconf){
+		//prüfe jeden Step
+		//prüfe bei jeder visibility if-Abfrage, ob die enthaltenen Komponenten in einem späteren Step vorhanden sind
+		//notwendig hierfür ist die Hierarchie 
+		
+		
+	}
 }
