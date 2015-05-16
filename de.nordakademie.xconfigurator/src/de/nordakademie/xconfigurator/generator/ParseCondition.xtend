@@ -12,12 +12,13 @@ import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import org.eclipse.emf.common.util.EList
 
 /**
- * Parses a AbstractCondition into a boolean value
+ * Parses an AbstractCondition into a boolean value
+ * Dient hier nur als Vorlage für die JavaScript-Abstraktion,d a die Prüfung zur Laufzeit erfolgen muss
+ * @author: Pascal Laub
  * 
  */
 class ParseCondition {
 			
- 	//TODO: Better way than instanceof?
  	def boolean parse(AbstractCondition visible) {
 		if (visible instanceof Boolean) {
 			return parse(visible as Boolean)
