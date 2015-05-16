@@ -126,14 +126,15 @@ class XconfiguratorGenerator implements IGenerator {
 				<label for="#component-«reference.component.name»" class="pull-left">
 					«reference.component.label»
 				</label>
+				<br/><br/>
+				«IF reference.component.description != null»
+					<p class="help-block text-left">«reference.component.description.value»</p><br/>
+				«ENDIF»
 				<select class="form-control" id="component-«reference.component.name»">
 					«FOR value : reference.component.values.values»
 						<option>«value.value»</option>
 					«ENDFOR»
 				</select>
-				«IF reference.component.description != null»
-					<p class="help-block text-left">«reference.component.description.value»</p>
-				«ENDIF»
 				«generateComponentScript(reference.component)»
 		    </div>
 		'''
@@ -475,6 +476,8 @@ class XconfiguratorGenerator implements IGenerator {
 								</tbody>
 							</table>
 						</div>
+						
+						<button class="btn btn-primary" onClick="window.print()">Drucken</button>
 					</div>
 			    </div>
 			    			  
