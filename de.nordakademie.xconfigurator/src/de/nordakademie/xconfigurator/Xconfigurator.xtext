@@ -77,9 +77,6 @@ AbstractIfCondition:
 Condition:
 	'(' component=[Component|ID] ' = ' check=STRING ')';
 
-// TODO:type ok? 
-// 		Type soll hier dafür da sein, dass man in der Verarbeitung auslesen kann, 
-// 		ob die Bedingung eine And- oder eine Or-Verknüpfung ist
 IfStatement:
 	conditions+=Condition
 	(type+=('And' | 'Or') conditions+=Condition)*
