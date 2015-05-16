@@ -3,22 +3,21 @@
  */
 package de.nordakademie.xconfigurator.validation
 
-import de.nordakademie.xconfigurator.xconfigurator.Step
-import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
-import org.eclipse.xtext.validation.Check
+import de.nordakademie.xconfigurator.generator.ParseCondition
+import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.Predecessor
+import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
 import org.eclipse.emf.common.util.EList
-import javax.annotation.PreDestroy
-import de.nordakademie.xconfigurator.xconfigurator.Component
-import de.nordakademie.xconfigurator.xconfigurator.ComponentReference
-import de.nordakademie.xconfigurator.generator.ParseCondition
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
+ * @author Julian Kondoch
  */
 class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 

@@ -24,12 +24,10 @@ import org.eclipse.xtext.generator.IGenerator
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#code-generation
  */
 class XconfiguratorGenerator implements IGenerator {
-		
-	var ParseCondition parseCondition = new ParseCondition()
-	
+			
 	override void doGenerate(Resource resource, IFileSystemAccess fsa) {
 
-		/* Generate Application-Index */
+		/** Generate Application-Index */
 		for (xconf : resource.contents.filter(Xconfigurator)) {
 			fsa.generateFile(
 				'index.html',
@@ -40,25 +38,28 @@ class XconfiguratorGenerator implements IGenerator {
 
 	/**
 	 * Create Application
+	 * generates the step hierarchy
+	 * commits ordered ArrayList to displayHTML method
+	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
 	 */
 	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
-	 	//generates the step hierarchy
-	 	//commits ordered ArrayList to displayHTML method
+	 	
 	 	
 	 	var ArrayList<Step> steps
 	 	var Step step = getFirstStep(xconfig.steps)
 	 	steps = new ArrayList<Step>
 	
 		while (step != null) {
-			//if (stepHasVisibleElements(step)){
 			steps.add(step)
-			//}
 			step = getSuccessor(xconfig.steps, step)
 		}
 		displaySteps(steps)
 	}	
-		 
+	
+	/**
+	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
+	 */ 
 	 def Step getFirstStep(EList<Step> steps){
 	 	if (steps.length > 0){
 	 		for(Step step: steps){
@@ -70,6 +71,9 @@ class XconfiguratorGenerator implements IGenerator {
 	 	}
 	 }
 	 
+	 /**
+	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
+	 */
 	 def Step getSuccessor(EList<Step> steps,Step predecessor){
 	 	for (Step step: steps){
 	 		if (step.predecessor.size > 0){
@@ -80,25 +84,10 @@ class XconfiguratorGenerator implements IGenerator {
 	 	}
 	 	return null
  	}
- 	
- 	def boolean stepHasVisibleElements (Step step){
-		//var boolean returnValue
-		
-		if (step.elements.length > 0){
-			var int i
-			for (i = 0;i < step.elements.length; i++){
-				if (isVisible(step.elements.get(i).component)){
-					return true
-				}
-			}	
-		}
-		return false
-	}
- 	
- 	def boolean isVisible(Component component) {
-		return parseCondition.parse(component.visibility.condition);
- 	}
 
+	/**
+	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
+	 */
 	def displaySteps(ArrayList<Step> orderedStepList){
 	 	var stepIndex=1
 	 	return '''
@@ -113,7 +102,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	 }
 	 
-	 
+	 /**
+	  * @author Julian Kondoch
+	  */
 	def showContent(ArrayList<Step> steps) {
 		var stepIndex=1
 		var backButtonName = "go-back-button"
@@ -145,6 +136,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Pascal Laub
+	 */
 	def showComponents(Step step) {
 		return '''
 		«FOR component : step.elements»
@@ -153,6 +147,9 @@ class XconfiguratorGenerator implements IGenerator {
 		'''
 	}
 	
+	/**
+	 * @author Pascal Laub
+	 */
 	def showComponent(ComponentReference reference) {
 		return '''
 		
@@ -174,7 +171,7 @@ class XconfiguratorGenerator implements IGenerator {
 	}
 	
 	/**
-	 * @author Niels Maseberg
+	 * @author Niels Maseberg, Pascal Laub, Niklas Rothe
 	 */
 	def generateButtonScript(int i, String buttonName) {
 		return '''			    
