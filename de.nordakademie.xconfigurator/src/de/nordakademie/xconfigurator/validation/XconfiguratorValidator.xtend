@@ -4,19 +4,18 @@
 package de.nordakademie.xconfigurator.validation
 
 import de.nordakademie.xconfigurator.generator.ParseCondition
+import de.nordakademie.xconfigurator.generator.StepHierarchy
 import de.nordakademie.xconfigurator.xconfigurator.Component
 import de.nordakademie.xconfigurator.xconfigurator.Predecessor
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
+import de.nordakademie.xconfigurator.xconfigurator.impl.AbstractConditionImpl
+import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtext.validation.Check
-import de.nordakademie.xconfigurator.generator.StepHierarchy
-import java.util.ArrayList
-import de.nordakademie.xconfigurator.xconfigurator.Condition
-import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
-import de.nordakademie.xconfigurator.xconfigurator.impl.AbstractConditionImpl
+import java.util.List
 
 /**
  * This class contains custom validation rules. 
@@ -126,6 +125,24 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	}
 
 	@Check
+	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
+
+		//Endpoint
+		var int i = 0
+		for (Step step : xconf.steps) {
+			if (step.successor.isEmpty) {
+				i++
+				if (i > 1) {
+					error(
+						'Multiple Steps without successor. Allowed at most one!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
+				}
+			}
+		}
+	}
+
+	@Check
 	def checkFirstStepHasVisibleElement(Xconfigurator xconf) {
 		var int i
 		var boolean hasVisibleElement = false
@@ -146,24 +163,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 				'First Step needs at least one visible element!',
 				XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 			)
-		}
-	}
-
-	@Check
-	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
-
-		//Endpoint
-		var int i = 0
-		for (Step step : xconf.steps) {
-			if (step.successor.isEmpty) {
-				i++
-				if (i > 1) {
-					error(
-						'Multiple Steps without successor. Allowed at most one!',
-						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
-					)
-				}
-			}
 		}
 	}
 
@@ -277,7 +276,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
-	
+
 	@Check
 	def checkIfEveryStepContainsComponents(Xconfigurator xconf) {
 		if (xconf.steps.length > 0) {
@@ -291,31 +290,38 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
-	
+
 	@Check
 	def checkComponentContainedInFollowedSteps(Xconfigurator xconf) {
-
-		//prüfe jeden Step
-		//prüfe bei jeder visibility if-Abfrage, ob die enthaltenen Komponenten in einem späteren Step vorhanden sind
-		//notwendig hierfür ist die Hierarchie xxx
 		var ArrayList<Step> orderedSteps
 		var int i
+		var int j
+		var int k
+		var int l
 		orderedSteps = stepHierarchy.getOrderedStepList(xconf)
 
-		for (Step step : orderedSteps) {
-			for (i = 0; i < step.elements.length; i++) {
-				var Component comp
-				var AbstractConditionImpl cond
-				var String componentName
-				componentName = step.elements.get(i).component.name
+		for (i = 0;i < orderedSteps.length; i++) {
+			for (j = 0;j < orderedSteps.get(i).elements.length; j++) {
+				var List<Component> componentList
 
-				//Für jede Komponente innerhalb der IF-Clause muss geguckt werden, ob diese eine Komponente in den nächsten Steps ist
-				//ob dies eine Komponente aus den vorherigen Steps ist
-				i = 7
+				componentList = parseCondition.getComponentsByAbstractCondition(
+					orderedSteps.get(i).elements.get(j).component.visibility.condition)
 
+				for (Component component : componentList) {
+					for (k = i + 1; k < orderedSteps.length; k++) {
+						for (l = 0; l < orderedSteps.get(k).elements.length; l++) {
+							if (component.identityEquals(orderedSteps.get(k).elements.get(l).component)) {
+								error(
+									'Step ' + orderedSteps.get(i).name + ' has a reference to component ' +
+										component.name + ' that belongs to the future step ' + orderedSteps.get(k).name +
+										'!',
+									XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+								)
+							}
+						}
+					}
+				}
 			}
-
 		}
-
 	}
 }

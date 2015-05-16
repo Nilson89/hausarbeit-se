@@ -8,6 +8,8 @@ import de.nordakademie.xconfigurator.xconfigurator.ElseIf
 import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import org.eclipse.emf.common.util.EList
 import de.nordakademie.xconfigurator.xconfigurator.Component
+import java.util.ArrayList
+import java.util.List
 
 /**
  * Parses an AbstractCondition into a boolean value
@@ -26,9 +28,10 @@ class ParseCondition {
 		}
 	}
 
-	def EList<Component> getComponentsByAbstractCondition(AbstractCondition visible) {
-		var EList<Component> components
-		var EList<Condition> conditions = getConditions(visible)
+
+	def List<Component> getComponentsByAbstractCondition(AbstractCondition visible) {
+		var List<Component> components = new ArrayList<Component>()
+		var List<Condition> conditions = getConditions(visible)
 		if (conditions != null) {
 			for (Condition condition : conditions) {
 				components.add(condition.component)
@@ -37,8 +40,8 @@ class ParseCondition {
 		return components
 	}
 
-	def EList<Condition> getConditions(AbstractCondition visible) {
-		var EList<Condition> conditions
+	def List<Condition> getConditions(AbstractCondition visible) {
+		var List<Condition> conditions = new ArrayList<Condition>
 		if (visible instanceof AbstractIfCondition) {
 			conditions.addAll(getConditions(visible.^if.stmt))
 			conditions.addAll(getConditions(visible.elseif))
@@ -47,8 +50,8 @@ class ParseCondition {
 		return null
 	}
 
-	def EList<Condition> getConditions(EList<ElseIf> visible) {
-		var EList<Condition> conditions
+	def List<Condition> getConditions(EList<ElseIf> visible) {
+		var List<Condition> conditions = new ArrayList<Condition>()
 		if (visible != null) {
 			for (ElseIf clause : visible) {
 				conditions.addAll(getConditions(clause.stmt))
