@@ -327,7 +327,11 @@ class XconfiguratorGenerator implements IGenerator {
 							if (typeof this.visibleCondition === 'boolean') {
 								return this.visibleCondition;
 							} else if (typeof this.visibleCondition === 'function') {
-								return this.visibleCondition();
+								var result = this.visibleCondition();
+								while (typeof result !== 'boolean') {
+									result = result();
+								}
+								return result;
 							} else {
 								return false;
 							}
