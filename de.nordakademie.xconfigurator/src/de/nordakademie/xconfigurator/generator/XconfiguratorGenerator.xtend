@@ -35,11 +35,6 @@ class XconfiguratorGenerator implements IGenerator {
 				'index.html',
 				application(xconf)
 			);
-			
-			fsa.generateFile(
-				'configurationlist.html',
-				myConfigurations()
-			);
 		}
 	}
 
@@ -377,6 +372,30 @@ class XconfiguratorGenerator implements IGenerator {
 					$('#xconfigurator-form').on('submit', function(e) {
 						e.preventDefault();
 						
+						/* Hide configurator-bar */
+						$('#configurator-bar').hide();
+						
+						/* Show summary */
+						$('#configurator-summary').show();
+						
+						/* Parse choosed form values */
+						var fields = $('#xconfigurator-form .form-group[style*="display: block"]');
+						var values = [];
+						$(fields).find(':input').each(function(index, element) {
+							console.debug(element);
+							
+							values.push({
+								name: $(element).parent().find('label').text(),
+								value: $(element).val()
+							});
+						});
+						
+						/* Get Summary-Table */
+						var tbody = $('#configurator-summary .table tbody');
+						$(values).each(function(index, element) {
+							$(tbody).append('<tr><td>'+element.name+'</td><td>'+element.value+'</td></tr>');
+						});
+						
 						console.debug('Save triggered');
 					});
 				});
@@ -433,9 +452,6 @@ class XconfiguratorGenerator implements IGenerator {
 			     		    <li>
 			     		      <a href="index.html">Home</a>
 			     		    </li>
-			     		    <li>
-			     		      <a href="configurationlist.html">Meine Konfigurationen</a>
-			     		    </li>
 			     		  </ul>
 			     		</div>
 			      </div>
@@ -450,80 +466,37 @@ class XconfiguratorGenerator implements IGenerator {
 			    	</div>
 			    	
 			    	<!-- Configurator -->
-			    	<div class="row form-group">
+			    	<div id="configurator-bar" class="row form-group">
 			    	    <div class="col-xs-12">
 			    	        <ul class="nav nav-pills nav-justified thumbnail setup-panel">
 								«generateStepHierarchy(xconf)»
 							</ul>
 						</div>
 					</div>
+					
+					<!-- Details -->
+					<div id="configurator-summary" style="display:none">
+						<h3>Zusammenfassung</h3>
+						<p>
+						In der folgenden Zusammenfassung sehen Sie Ihre gewählte Konfiguration. Sie können Ihre Konfiguration drucken. 
+						Wählen Sie dafür im unteren Bedienfeld die Aktion "Drucken".
+						</p>
+						<div class="table-responsive">
+							<table class="table table-hover">
+								<thead>
+									<tr>
+										<th>Komponente</th>
+										<th>Auswahl</th>
+									</tr>
+								</thead>
+								<tbody>
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
 			    </div>
 			    			  
-			</body>
-		</html>
-		'''
-	}
-	
-	/**
-	 * @author Niels Maseberg
-	 */
-	def myConfigurations() {
-		return '''
-			<!DOCTYPE html>
-			<html lang="en">
-			  <head>
-			    <meta charset="utf-8">
-			    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-			    <meta name="viewport" content="width=device-width, initial-scale=1">
-			    <title>XConfigurator</title>
-			
-			    <!-- Bootstrap -->
-			    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
-			    
-			
-			    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-			    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-			    <!--[if lt IE 9]>
-			      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-			      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-			    <![endif]-->
-			    
-			    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-			    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-			    <!-- Include all compiled plugins (below), or include individual files as needed -->
-			    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-			  </head>
-			  <body>
-			    <nav class="navbar navbar-default">
-			      <div class="container">
-			        <div class="navbar-header">
-			       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#xconfigurator-navbar">
-			         <span class="sr-only">Toggle navigation</span>
-			         <span class="icon-bar"></span>
-			         <span class="icon-bar"></span>
-			         <span class="icon-bar"></span>
-			       </button>
-			       <a class="navbar-brand" href="index.html">XConfigurator</a>
-			     </div>
-			     
-			     <div class="collapse navbar-collapse" id="xconfigurator-navbar">
-			     		  <ul class="nav navbar-nav">
-			     		    <li>
-			     		      <a href="index.html">Home</a>
-			     		    </li>
-			     		    <li>
-			     		      <a href="configurationlist.html">Meine Konfigurationen</a>
-			     		    </li>
-			     		  </ul>
-			     		</div>
-			      </div>
-			    </nav>
-			    
-			    <div class="container">
-			    	<h1>Meine Konfigurationen</h1>
-			    	
-			    	<p>#ToDo</p>
-			    </div>
 			</body>
 		</html>
 		'''
