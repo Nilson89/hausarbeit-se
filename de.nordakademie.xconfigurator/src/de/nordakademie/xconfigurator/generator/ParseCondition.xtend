@@ -10,7 +10,6 @@ import org.eclipse.emf.common.util.EList
 
 /**
  * Parses an AbstractCondition into a boolean value
- * Dient hier nur als Vorlage für die JavaScript-Abstraktion,d a die Prüfung zur Laufzeit erfolgen muss
  * @author Pascal Laub
  * 
  */
