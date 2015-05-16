@@ -58,8 +58,7 @@ class XconfiguratorGenerator implements IGenerator {
 		}
 		displaySteps(steps)
 	}	
-				 
-	 // TODO: Wenn kein erster Step gefunden wurde -> throw exception	 
+		 
 	 def Step getFirstStep(EList<Step> steps){
 	 	if (steps.length > 0){
 	 		for(Step step: steps){
