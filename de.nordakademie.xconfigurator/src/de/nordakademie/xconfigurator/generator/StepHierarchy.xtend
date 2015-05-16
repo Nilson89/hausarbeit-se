@@ -40,6 +40,20 @@ class StepHierarchy {
 	 }
 	 
 	 /**
+	 * @author Julian Kondoch
+	 */	
+	 def Step getLastStep(EList<Step> steps){
+	 	if (steps.length > 0){
+	 		for(Step step: steps){
+	 			if (step.successor.isEmpty){
+	 				return step
+	 			}
+	 		}
+	 		return null
+	 	}
+	 }
+	 
+	 /**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
 	 */
 	 def Step getSuccessor(EList<Step> steps,Step predecessor){
