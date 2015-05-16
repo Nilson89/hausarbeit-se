@@ -43,16 +43,10 @@ class XconfiguratorGenerator implements IGenerator {
 	 var StepHierarchy stepHierarchy = new StepHierarchy()
 	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
-	 
-	 	var ArrayList<Step> steps
-	 	var Step step = stepHierarchy.getFirstStep(xconfig.steps)
-	 	steps = new ArrayList<Step>
-	
-		while (step != null) {
-			steps.add(step)
-			step = stepHierarchy.getSuccessor(xconfig.steps, step)
-		}
-		displaySteps(steps)
+	 	var ArrayList<Step> orderedSteps
+	 	orderedSteps = stepHierarchy.getOrderedStepList(xconfig)
+	 	
+		displaySteps(orderedSteps)
 	}	
 
 	/**
@@ -82,10 +76,17 @@ class XconfiguratorGenerator implements IGenerator {
 		return '''
 		<form id="xconfigurator-form">
 			«FOR step:steps»
+				
 				<div class="row setup-content" id="step-«stepIndex++»">
 					<div class="col-xs-12">
 				    	<div class="col-md-12 well text-center">
-				        	 <h1> STEP «step.name»</h1>
+				        	 <h1> STEP 
+				        		«IF step.label != null»
+									«step.label»
+								«ELSE»
+									«step.name»
+								«ENDIF»
+							</h1>
 	        	 			 «showComponents(step)»
 			            	 «IF !step.successor.isEmpty»
 				            	 <button id="«nextButtonName»«stepIndex»" data-target="#step-«stepIndex»" class="btn btn-primary pull-right btn-next">Weiter</button>

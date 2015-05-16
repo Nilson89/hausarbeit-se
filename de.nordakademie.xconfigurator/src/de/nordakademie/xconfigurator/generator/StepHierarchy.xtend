@@ -2,6 +2,8 @@ package de.nordakademie.xconfigurator.generator
 
 import org.eclipse.emf.common.util.EList
 import de.nordakademie.xconfigurator.xconfigurator.Step
+import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
+import java.util.ArrayList
 
 /**
  * Generates the step hierarchy
@@ -9,6 +11,19 @@ import de.nordakademie.xconfigurator.xconfigurator.Step
  * 
  */
 class StepHierarchy {
+	
+	def ArrayList<Step> getOrderedStepList (Xconfigurator xconfig){
+		var ArrayList<Step> steps
+	 	var Step step = getFirstStep(xconfig.steps)
+	 	steps = new ArrayList<Step>
+	
+		while (step != null) {
+			steps.add(step)
+			step = getSuccessor(xconfig.steps, step)
+		}
+		
+		return steps
+	}
 	
 	/**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe

@@ -12,6 +12,7 @@ import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtext.validation.Check
+import de.nordakademie.xconfigurator.generator.StepHierarchy
 
 /**
  * This class contains custom validation rules. 
@@ -22,6 +23,7 @@ import org.eclipse.xtext.validation.Check
 class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	var ParseCondition parseCondition = new ParseCondition()
+	var StepHierarchy stepHierarchy = new StepHierarchy()
 
 	@Check
 	def checkMaxOneSuccessor(Step step) {
@@ -237,7 +239,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		//prüfe jeden Step
 		//prüfe bei jeder visibility if-Abfrage, ob die enthaltenen Komponenten in einem späteren Step vorhanden sind
 		//notwendig hierfür ist die Hierarchie 
-		
+				
 		
 	}
 }
