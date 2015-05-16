@@ -13,6 +13,10 @@ import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtext.validation.Check
 import de.nordakademie.xconfigurator.generator.StepHierarchy
+import java.util.ArrayList
+import de.nordakademie.xconfigurator.xconfigurator.Condition
+import de.nordakademie.xconfigurator.xconfigurator.AbstractCondition
+import de.nordakademie.xconfigurator.xconfigurator.impl.AbstractConditionImpl
 
 /**
  * This class contains custom validation rules. 
@@ -105,6 +109,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	@Check
 	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
+
 		//Startpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
@@ -119,7 +124,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
-	
+
 	@Check
 	def checkFirstStepHasVisibleElement(Xconfigurator xconf) {
 		var int i
@@ -143,7 +148,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			)
 		}
 	}
-	
+
 	@Check
 	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
 
@@ -161,7 +166,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
-		
+
 	@Check
 	def checkNoCycleInStepSuccessor(Step step) {
 		if (!step.successor.empty) {
@@ -195,6 +200,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkComponentUniqueIdentifierInStep(Step step) {
 		if (!step.elements.empty) {
+
 			//iterate through elements container and check names
 			var int i
 			var int j
@@ -203,14 +209,14 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 				for (j = i + 1; j < step.elements.length; j++) {
 					if (step.elements.get(i).identityEquals(step.elements.get(j))) {
 						error(
-							'Name of Component ' + step.elements.get(i).component.name +
-								' in ' + step.name + ' is used several times. Allowed at most one!',
+							'Name of Component ' + step.elements.get(i).component.name + ' in ' + step.name +
+								' is used several times. Allowed at most one!',
 							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 						)
 					}
 				}
-		}
-			
+			}
+
 		}
 	}
 
@@ -233,13 +239,83 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
+
+	@Check
+	def checkIfFirstStepIsUsedAsSuccessor(Xconfigurator xconf) {
+		if (xconf.steps.length > 0) {
+			var Step firstStep
+			firstStep = stepHierarchy.getFirstStep(xconf.steps)
+
+			for (Step step : xconf.steps) {
+				for (Successor successor : step.successor) {
+					if (successor.step.identityEquals(firstStep)) {
+						error(
+							'It is not allowed to use first step ' + successor.step.name + ' as successor!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	def checkIfLastStepIsUsedAsPredecessor(Xconfigurator xconf) {
+		if (xconf.steps.length > 0) {
+			var Step lastStep
+			lastStep = stepHierarchy.getLastStep(xconf.steps)
+
+			for (Step step : xconf.steps) {
+				for (Predecessor predecessor : step.predecessor) {
+					if (predecessor.step.identityEquals(lastStep)) {
+						error(
+							'It is not allowed to use last step ' + predecessor.step.name + ' as predecessor!',
+							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+						)
+					}
+				}
+			}
+		}
+	}
 	
 	@Check
-	def checkComponentContainedInFollowedSteps(Xconfigurator xconf){
+	def checkIfEveryStepContainsComponents(Xconfigurator xconf) {
+		if (xconf.steps.length > 0) {
+			for (Step step : xconf.steps) {
+				if (step.elements.length == 0) {
+					error(
+						'Steps must contain at least one element. Step ' + step.name + ' has 0!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
+				}
+			}
+		}
+	}
+	
+	@Check
+	def checkComponentContainedInFollowedSteps(Xconfigurator xconf) {
+
 		//prüfe jeden Step
 		//prüfe bei jeder visibility if-Abfrage, ob die enthaltenen Komponenten in einem späteren Step vorhanden sind
-		//notwendig hierfür ist die Hierarchie 
-				
-		
+		//notwendig hierfür ist die Hierarchie xxx
+		var ArrayList<Step> orderedSteps
+		var int i
+		orderedSteps = stepHierarchy.getOrderedStepList(xconf)
+
+		for (Step step : orderedSteps) {
+			for (i = 0; i < step.elements.length; i++) {
+				var Component comp
+				var AbstractConditionImpl cond
+				var String componentName
+				componentName = step.elements.get(i).component.name
+
+				//Für jede Komponente innerhalb der IF-Clause muss geguckt werden, ob diese eine Komponente in den nächsten Steps ist
+				//ob dies eine Komponente aus den vorherigen Steps ist
+				i = 7
+
+			}
+
+		}
+
 	}
 }
