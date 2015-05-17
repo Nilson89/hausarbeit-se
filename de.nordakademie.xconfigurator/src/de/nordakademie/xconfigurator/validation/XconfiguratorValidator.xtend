@@ -158,7 +158,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		}
 		if (!hasVisibleElement) {
 			error(
-				'First Step needs at least one visible element!',
+				'First Step needs at least one visible component!',
 				XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 			)
 		}
@@ -213,13 +213,11 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 					}
 				}
 			}
-
 		}
 	}
 	
 	@Check
 	def checkComponentGlobalUniqueIdentifier(Xconfigurator xconf) {
-
 		var int i
 		var int j
 		var String componentName
@@ -259,7 +257,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	}
 
 	@Check
-	def checkIfFirstStepIsUsedAsSuccessor(Xconfigurator xconf) {
+	def checkFirstStepIsUsedAsSuccessor(Xconfigurator xconf) {
 		if (xconf.steps.length > 0) {
 			var Step firstStep
 			firstStep = stepHierarchy.getFirstStep(xconf.steps)
@@ -278,7 +276,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	}
 
 	@Check
-	def checkIfLastStepIsUsedAsPredecessor(Xconfigurator xconf) {
+	def checkLastStepIsUsedAsPredecessor(Xconfigurator xconf) {
 		if (xconf.steps.length > 0) {
 			var Step lastStep
 			lastStep = stepHierarchy.getLastStep(xconf.steps)
@@ -297,7 +295,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	}
 
 	@Check
-	def checkIfEveryStepContainsComponents(Xconfigurator xconf) {
+	def checkEveryStepContainsComponents(Xconfigurator xconf) {
 		if (xconf.steps.length > 0) {
 			for (Step step : xconf.steps) {
 				if (step.elements.length == 0) {
@@ -311,8 +309,23 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	}
 
 	@Check
+	def checkEveryComponentContainsValues(Xconfigurator xconf) {
+		var int i
+		var Component component
+
+		for (i = 0; i < xconf.component.length; i++) {
+			component = xconf.component.get(i)
+
+			if (component.values.values.empty) {
+				error(
+					'Every component must contain at least one value. Value of component ' + component.name +
+						' is null!', XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS)
+			}
+		}
+	}
+
+	@Check
 	def checkComponentContainedInFollowedSteps(Xconfigurator xconf) {
-		//test
 		var List<Step> orderedSteps
 		var int i
 		var int j
