@@ -59,7 +59,7 @@ class StepHierarchy {
 	 */
 	def Step getSuccessor(EList<Step> steps, Step predecessor) {
 		for (Step step : steps) {
-			if (step.predecessor.step.identityEquals(predecessor)) {
+			if (step.predecessor != null && step.predecessor.step.identityEquals(predecessor)) {
 				return step
 			}
 		}
