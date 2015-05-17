@@ -11,9 +11,8 @@ import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
-import org.eclipse.emf.common.util.EList
-import org.eclipse.xtext.validation.Check
 import java.util.List
+import org.eclipse.xtext.validation.Check
 
 /**
  * This class contains custom validation rules. 

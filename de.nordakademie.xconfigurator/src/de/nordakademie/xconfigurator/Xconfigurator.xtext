@@ -57,7 +57,6 @@ Component:
 		values=ValueList
 		(visibility=AbstractVisible)?
 		(description=Description)?
-		('selected:' '[' selected=ValueType ']')?
 	'}'
 ;
 

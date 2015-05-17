@@ -93,12 +93,15 @@ class ParseCondition {
 		return result
 	}
 
+	/**
+	 * Hier nur als Dummy, da der Check zur Laufzeit erfolgen muss.
+	 * Dies ist bei HTML nun in JavaScript gelöst.
+	 * Diese Parser kann aber genutzt werden, wenn bspw. ein Java-Applet mit Hilfe
+	 * eines modifizierten bzw. zusätzlichen Generators generiert wird, was einen
+	 * Laufzeitcheck mit Java ermöglichen würde.
+	 */
 	def boolean parse(Condition condition) {
-		if (condition.component.selected == null) {
-			return false;
-		} else {
-			return condition.component.selected.value.equals(condition.check)
-		}
+		return false;
 	}
 
 	def ElseIf parse(EList<ElseIf> visible) {
