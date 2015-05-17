@@ -4,6 +4,7 @@ import org.eclipse.emf.common.util.EList
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import java.util.ArrayList
+import java.util.List
 
 /**
  * Generates the step hierarchy
@@ -12,7 +13,7 @@ import java.util.ArrayList
  */
 class StepHierarchy {
 	
-	def ArrayList<Step> getOrderedStepList (Xconfigurator xconfig){
+	def List<Step> getOrderedStepList (Xconfigurator xconfig){
 		var ArrayList<Step> steps
 	 	var Step step = getFirstStep(xconfig.steps)
 	 	steps = new ArrayList<Step>

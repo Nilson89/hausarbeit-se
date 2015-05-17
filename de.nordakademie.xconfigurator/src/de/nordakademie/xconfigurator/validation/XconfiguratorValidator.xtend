@@ -11,8 +11,6 @@ import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Successor
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
 import de.nordakademie.xconfigurator.xconfigurator.XconfiguratorPackage
-import de.nordakademie.xconfigurator.xconfigurator.impl.AbstractConditionImpl
-import java.util.ArrayList
 import org.eclipse.emf.common.util.EList
 import org.eclipse.xtext.validation.Check
 import java.util.List
@@ -218,6 +216,27 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 		}
 	}
+	
+	@Check
+	def checkComponentGlobalUniqueIdentifier(Xconfigurator xconf) {
+
+		var int i
+		var int j
+		var String componentName
+
+		for (i = 0; i < xconf.component.length; i++) {
+			componentName = xconf.component.get(i).name
+
+			for (j = i + 1; j < xconf.component.length; j++) {
+				if (componentName == xconf.component.get(j).name) {
+					error(
+						'Every component should be unique. Component ' + componentName + ' is declared at least twice!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
+				}
+			}
+		}
+	}
 
 	@Check
 	def checkNoCycleInSuccessorPredecessor(Step step) {
@@ -293,7 +312,8 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	@Check
 	def checkComponentContainedInFollowedSteps(Xconfigurator xconf) {
-		var ArrayList<Step> orderedSteps
+		//test
+		var List<Step> orderedSteps
 		var int i
 		var int j
 		var int k

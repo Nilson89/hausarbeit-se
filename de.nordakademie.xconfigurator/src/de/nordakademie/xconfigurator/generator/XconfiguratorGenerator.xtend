@@ -12,11 +12,10 @@ import de.nordakademie.xconfigurator.xconfigurator.Condition
 import de.nordakademie.xconfigurator.xconfigurator.IfStatement
 import de.nordakademie.xconfigurator.xconfigurator.Step
 import de.nordakademie.xconfigurator.xconfigurator.Xconfigurator
-import java.util.ArrayList
-import org.eclipse.emf.common.util.EList
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.IFileSystemAccess
 import org.eclipse.xtext.generator.IGenerator
+import java.util.List
 
 /**
  * Generates code from your model files on save.
@@ -43,7 +42,7 @@ class XconfiguratorGenerator implements IGenerator {
 	 var StepHierarchy stepHierarchy = new StepHierarchy()
 	 
 	 def generateStepHierarchy(Xconfigurator xconfig){
-	 	var ArrayList<Step> orderedSteps
+	 	var List<Step> orderedSteps
 	 	orderedSteps = stepHierarchy.getOrderedStepList(xconfig)
 	 	
 		displaySteps(orderedSteps)
@@ -52,7 +51,7 @@ class XconfiguratorGenerator implements IGenerator {
 	/**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
 	 */
-	def displaySteps(ArrayList<Step> orderedStepList){
+	def displaySteps(List<Step> orderedStepList){
 	 	var stepIndex=1
 	 	return '''
 		«FOR step: orderedStepList»
@@ -69,7 +68,7 @@ class XconfiguratorGenerator implements IGenerator {
 	 /**
 	  * @author Julian Kondoch
 	  */
-	def showContent(ArrayList<Step> steps) {
+	def showContent(List<Step> steps) {
 		var stepIndex=1
 		var backButtonName = "go-back-button"
 		var nextButtonName = "save-button"
