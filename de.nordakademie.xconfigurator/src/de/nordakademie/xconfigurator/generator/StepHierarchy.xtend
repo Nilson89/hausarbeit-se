@@ -12,59 +12,57 @@ import java.util.List
  * 
  */
 class StepHierarchy {
-	
-	def List<Step> getOrderedStepList (Xconfigurator xconfig){
+
+	def List<Step> getOrderedStepList(Xconfigurator xconfig) {
 		var ArrayList<Step> steps
-	 	var Step step = getFirstStep(xconfig.steps)
-	 	steps = new ArrayList<Step>
-	
+		var Step step = getFirstStep(xconfig.steps)
+		steps = new ArrayList<Step>
+
 		while (step != null) {
 			steps.add(step)
 			step = getSuccessor(xconfig.steps, step)
 		}
-		
+
 		return steps
 	}
-	
+
 	/**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
-	 */	
-	 def Step getFirstStep(EList<Step> steps){
-	 	if (steps.length > 0){
-	 		for(Step step: steps){
-	 			if (step.predecessor.isEmpty){
-	 				return step
-	 			}
-	 		}
-	 		return null
-	 	}
-	 }
-	 
-	 /**
+	 */
+	def Step getFirstStep(EList<Step> steps) {
+		if (steps.length > 0) {
+			for (Step step : steps) {
+				if (step.predecessor == null) {
+					return step
+				}
+			}
+			return null
+		}
+	}
+
+	/**
 	 * @author Julian Kondoch
-	 */	
-	 def Step getLastStep(EList<Step> steps){
-	 	if (steps.length > 0){
-	 		for(Step step: steps){
-	 			if (step.successor.isEmpty){
-	 				return step
-	 			}
-	 		}
-	 		return null
-	 	}
-	 }
-	 
-	 /**
+	 */
+	def Step getLastStep(EList<Step> steps) {
+		if (steps.length > 0) {
+			for (Step step : steps) {
+				if (step.successor == null) {
+					return step
+				}
+			}
+			return null
+		}
+	}
+
+	/**
 	 * @author Julian Kondoch, Pascal Laub, Niklas Rothe
 	 */
-	 def Step getSuccessor(EList<Step> steps,Step predecessor){
-	 	for (Step step: steps){
-	 		if (step.predecessor.size > 0){
-	 			if (step.predecessor.get(0).step.identityEquals(predecessor)){
+	def Step getSuccessor(EList<Step> steps, Step predecessor) {
+		for (Step step : steps) {
+			if (step.predecessor.step.identityEquals(predecessor)) {
 				return step
-	 			}
-	 		}
-	 	}
-	 	return null
- 	}
+			}
+		}
+		return null
+	}
 }

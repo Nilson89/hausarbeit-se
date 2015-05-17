@@ -87,12 +87,12 @@ class XconfiguratorGenerator implements IGenerator {
 								«ENDIF»
 							</h1>
 	        	 			 «showComponents(step)»
-			            	 «IF !step.successor.isEmpty»
+			            	 «IF step.successor != null»
 				            	 <button id="«nextButtonName»«stepIndex»" data-target="#step-«stepIndex»" class="btn btn-primary pull-right btn-next">Weiter</button>
 				             «ELSE»
 				             	<button id="save-configuration" type="submit" class="btn btn-primary pull-right">Speichern</button>	 
 			            	 «ENDIF»
-			            	 «IF !step.predecessor.isEmpty»
+			            	 «IF step.predecessor != null»
 								 <button id="«backButtonName»«stepIndex-2»" data-target="#step-«stepIndex-2»" class="btn btn-default pull-left btn-previous">Zurueck</button>
 							 «ENDIF»
 							 <div class="clearfix"></div>

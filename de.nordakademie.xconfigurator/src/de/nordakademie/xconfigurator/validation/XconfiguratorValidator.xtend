@@ -17,7 +17,7 @@ import java.util.List
 
 /**
  * This class contains custom validation rules. 
- *
+ * 
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  * @author Julian Kondoch
  */
@@ -26,20 +26,19 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	var ParseCondition parseCondition = new ParseCondition()
 	var StepHierarchy stepHierarchy = new StepHierarchy()
 
-	@Check
-	def checkMaxOneSuccessor(Step step) {
-		if (step.successor.size > 1) {
-			warning('A Step contains at most one successor!', XconfiguratorPackage.Literals.STEP__SUCCESSOR)
-		}
-	}
-
-	@Check
-	def checkMaxOnePredecessor(Step step) {
-		if (step.predecessor.size > 1) {
-			warning('A Step contains at most one predecessor!', XconfiguratorPackage.Literals.STEP__PREDECESSOR)
-		}
-	}
-
+//	@Check
+//	def checkMaxOneSuccessor(Step step) {
+//		if (step.successor.size > 1) {
+//			warning('A Step contains at most one successor!', XconfiguratorPackage.Literals.STEP__SUCCESSOR)
+//		}
+//	}
+//
+//	@Check
+//	def checkMaxOnePredecessor(Step step) {
+//		if (step.predecessor.size > 1) {
+//			warning('A Step contains at most one predecessor!', XconfiguratorPackage.Literals.STEP__PREDECESSOR)
+//		}
+//	}
 	@Check
 	def checkSuccessorUniqueInCollection(Xconfigurator xconf) {
 		var int i
@@ -47,13 +46,13 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 		for (i = 0; i < xconf.steps.length; i++) {
 			for (j = i + 1; j < xconf.steps.length; j++) {
-				var EList<Successor> succList1 = xconf.steps.get(i).successor
-				var EList<Successor> succList2 = xconf.steps.get(j).successor
+				var Successor successor1 = xconf.steps.get(i).successor
+				var Successor successor2 = xconf.steps.get(j).successor
 
-				if (!succList1.isEmpty && !succList2.isEmpty) {
-					if (succList1.get(0).step.identityEquals(succList2.get(0).step)) {
+				if (successor1 != null && successor2 != null) {
+					if (successor1.step.identityEquals(successor2.step)) {
 						error(
-							'Successor ' + succList1.get(0).step.name + ' is used several times. Allowed at most one!',
+							'Successor ' + successor1.step.name + ' is used several times. Allowed at most one!',
 							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 						)
 					}
@@ -69,13 +68,13 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 		for (i = 0; i < xconf.steps.length; i++) {
 			for (j = i + 1; j < xconf.steps.length; j++) {
-				var EList<Predecessor> predList1 = xconf.steps.get(i).predecessor
-				var EList<Predecessor> predList2 = xconf.steps.get(j).predecessor
+				var Predecessor predList1 = xconf.steps.get(i).predecessor
+				var Predecessor predList2 = xconf.steps.get(j).predecessor
 
-				if (!predList1.isEmpty && !predList2.isEmpty) {
-					if (predList1.get(0).step.identityEquals(predList2.get(0).step)) {
+				if (predList1 != null && predList2 != null) {
+					if (predList1.step.identityEquals(predList2.step)) {
 						error(
-							'Predecessor ' + predList1.get(0).step.name + ' is used several times. Allowed at most one!',
+							'Predecessor ' + predList1.step.name + ' is used several times. Allowed at most one!',
 							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 						)
 					}
@@ -107,10 +106,10 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
 
-		//Startpoint
+		// Startpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
-			if (step.predecessor.isEmpty) {
+			if (step.predecessor == null) {
 				i++
 				if (i > 1) {
 					error(
@@ -125,10 +124,10 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
 
-		//Endpoint
+		// Endpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
-			if (step.successor.isEmpty) {
+			if (step.successor == null) {
 				i++
 				if (i > 1) {
 					error(
@@ -146,7 +145,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		var boolean hasVisibleElement = false
 
 		for (Step step : xconf.steps) {
-			if (step.predecessor.isEmpty) {
+			if (step.predecessor == null) {
 				for (i = 0; i < step.elements.length; i++) {
 					var Component component
 					component = step.elements.get(i).component
@@ -166,30 +165,26 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	@Check
 	def checkNoCycleInStepSuccessor(Step step) {
-		if (!step.successor.empty) {
-			for (Successor succ : step.successor) {
-				if (succ.step.identityEquals(step)) {
-					error(
-						'Cycle in relation Step <-> Successor',
-						XconfiguratorPackage.Literals.STEP__SUCCESSOR
-					)
-				}
+		if (step.successor != null) {
+			if (step.successor.step.identityEquals(step)) {
+				error(
+					'Cycle in relation Step <-> Successor',
+					XconfiguratorPackage.Literals.STEP__SUCCESSOR
+				)
 			}
 		}
 	}
 
 	@Check
 	def checkNoCycleInStepPredecessor(Step step) {
-		if (!step.predecessor.empty) {
-			for (Predecessor pred : step.predecessor) {
-				if (pred.step.identityEquals(step)) {
+		if (step.predecessor != null) {
+			if (step.predecessor.step.identityEquals(step)) {
 
-					//<->eContainer!?
-					error(
-						'Cycle in relation Step <-> Predecessor',
-						XconfiguratorPackage.Literals.STEP__PREDECESSOR
-					)
-				}
+				// <->eContainer!?
+				error(
+					'Cycle in relation Step <-> Predecessor',
+					XconfiguratorPackage.Literals.STEP__PREDECESSOR
+				)
 			}
 		}
 	}
@@ -198,7 +193,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	def checkComponentUniqueIdentifierInStep(Step step) {
 		if (!step.elements.empty) {
 
-			//iterate through elements container and check names
+			// iterate through elements container and check names
 			var int i
 			var int j
 
@@ -215,7 +210,7 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			}
 		}
 	}
-	
+
 	@Check
 	def checkComponentGlobalUniqueIdentifier(Xconfigurator xconf) {
 		var int i
@@ -238,20 +233,16 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 
 	@Check
 	def checkNoCycleInSuccessorPredecessor(Step step) {
-		if (!step.successor.empty && !step.predecessor.empty) {
-			for (Successor succ : step.successor) {
-				for (Predecessor pred : step.predecessor) {
-					if (succ.step.identityEquals(pred.step)) {
-						error(
-							'Cycle in relation Successor <-> Predecessor',
-							XconfiguratorPackage.Literals.STEP__SUCCESSOR
-						)
-						error(
-							'Cycle in relation Successor <-> Predecessor',
-							XconfiguratorPackage.Literals.STEP__PREDECESSOR
-						)
-					}
-				}
+		if (step.successor != null && step.predecessor != null) {
+			if (step.successor.step.identityEquals(step.predecessor.step)) {
+				error(
+					'Cycle in relation Successor <-> Predecessor',
+					XconfiguratorPackage.Literals.STEP__SUCCESSOR
+				)
+				error(
+					'Cycle in relation Successor <-> Predecessor',
+					XconfiguratorPackage.Literals.STEP__PREDECESSOR
+				)
 			}
 		}
 	}
@@ -263,13 +254,11 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			firstStep = stepHierarchy.getFirstStep(xconf.steps)
 
 			for (Step step : xconf.steps) {
-				for (Successor successor : step.successor) {
-					if (successor.step.identityEquals(firstStep)) {
-						error(
-							'It is not allowed to use first step ' + successor.step.name + ' as successor!',
-							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
-						)
-					}
+				if (step.successor.step.identityEquals(firstStep)) {
+					error(
+						'It is not allowed to use first step ' + step.successor.step.name + ' as successor!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
 				}
 			}
 		}
@@ -282,13 +271,11 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			lastStep = stepHierarchy.getLastStep(xconf.steps)
 
 			for (Step step : xconf.steps) {
-				for (Predecessor predecessor : step.predecessor) {
-					if (predecessor.step.identityEquals(lastStep)) {
-						error(
-							'It is not allowed to use last step ' + predecessor.step.name + ' as predecessor!',
-							XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
-						)
-					}
+				if (step.predecessor.step.identityEquals(lastStep)) {
+					error(
+						'It is not allowed to use last step ' + step.predecessor.step.name + ' as predecessor!',
+						XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
+					)
 				}
 			}
 		}
@@ -317,9 +304,8 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 			component = xconf.component.get(i)
 
 			if (component.values.values.empty) {
-				error(
-					'Every component must contain at least one value. Value of component ' + component.name +
-						' is null!', XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS)
+				error('Every component must contain at least one value. Value of component ' + component.name +
+					' is null!', XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS)
 			}
 		}
 	}
@@ -333,8 +319,8 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		var int l
 		orderedSteps = stepHierarchy.getOrderedStepList(xconf)
 
-		for (i = 0;i < orderedSteps.length; i++) {
-			for (j = 0;j < orderedSteps.get(i).elements.length; j++) {
+		for (i = 0; i < orderedSteps.length; i++) {
+			for (j = 0; j < orderedSteps.get(i).elements.length; j++) {
 				var List<Component> componentList
 
 				componentList = parseCondition.getComponentsByAbstractCondition(
@@ -346,8 +332,8 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 							if (component.identityEquals(orderedSteps.get(k).elements.get(l).component)) {
 								error(
 									'Step ' + orderedSteps.get(i).name + ' has a reference to component ' +
-										component.name + ' that belongs to the future step ' + orderedSteps.get(k).name +
-										'!',
+										component.name + ' that belongs to the future step ' +
+										orderedSteps.get(k).name + '!',
 									XconfiguratorPackage.Literals.XCONFIGURATOR__STEPS
 								)
 							}

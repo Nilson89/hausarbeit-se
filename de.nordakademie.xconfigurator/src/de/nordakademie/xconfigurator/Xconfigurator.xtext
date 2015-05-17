@@ -27,8 +27,8 @@ Xconfigurator:
  */
 Step:
 	'step' label=STRING? name=ID '{'
-	(predecessor+=Predecessor)?
-	(successor+=Successor)?
+	(predecessor=Predecessor)?
+	(successor=Successor)?
 	(elements+=ComponentReference)*
 	'}';
 
