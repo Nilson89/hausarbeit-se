@@ -25,19 +25,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	var ParseCondition parseCondition = new ParseCondition()
 	var StepHierarchy stepHierarchy = new StepHierarchy()
 
-//	@Check
-//	def checkMaxOneSuccessor(Step step) {
-//		if (step.successor.size > 1) {
-//			warning('A Step contains at most one successor!', XconfiguratorPackage.Literals.STEP__SUCCESSOR)
-//		}
-//	}
-//
-//	@Check
-//	def checkMaxOnePredecessor(Step step) {
-//		if (step.predecessor.size > 1) {
-//			warning('A Step contains at most one predecessor!', XconfiguratorPackage.Literals.STEP__PREDECESSOR)
-//		}
-//	}
 	@Check
 	def checkSuccessorUniqueInCollection(Xconfigurator xconf) {
 		var int i
@@ -105,7 +92,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkOnlyOneStepWithoutPredecessor(Xconfigurator xconf) {
 
-		// Startpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
 			if (step.predecessor == null) {
@@ -123,7 +109,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 	@Check
 	def checkOnlyOneStepWithoutSuccessor(Xconfigurator xconf) {
 
-		// Endpoint
 		var int i = 0
 		for (Step step : xconf.steps) {
 			if (step.successor == null) {
@@ -179,7 +164,6 @@ class XconfiguratorValidator extends AbstractXconfiguratorValidator {
 		if (step.predecessor != null) {
 			if (step.predecessor.step.identityEquals(step)) {
 
-				// <->eContainer!?
 				error(
 					'Cycle in relation Step <-> Predecessor',
 					XconfiguratorPackage.Literals.STEP__PREDECESSOR
